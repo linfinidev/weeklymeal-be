@@ -1,32 +1,38 @@
+import { Fridge } from '@/modules/fridge/entities/fridge.entity';
+import { Recipe } from '@/modules/recipe/entities/recipe.entity';
 import {
-  Table,
+  Entity,
+  PrimaryGeneratedColumn,
   Column,
-  Model,
-  ForeignKey,
-  BelongsTo,
-} from 'sequelize-typescript';
-import { Fridge } from 'src/modules/fridge/entities/fridge.entity';
-import { Recipe } from 'src/modules/recipe/entities/recipe.entity';
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
-@Table
-export class Grocery extends Model {
-  @Column
+@Entity()
+export class Grocery {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
   name: string;
 
-  @Column
+  @Column()
   qty: string;
 
-  @ForeignKey(() => Recipe)
-  @Column
+  @Column()
+  date: string;
+
+  @Column({ type: 'uuid' })
   recipe_id: string;
 
-  @BelongsTo(() => Recipe)
+  @ManyToOne(() => Recipe)
+  @JoinColumn({ name: 'recipe_id' })
   recipe: Recipe;
 
-  @ForeignKey(() => Fridge)
-  @Column
-  Fridge_id: string;
+  @Column({ type: 'uuid' })
+  fridge_id: string;
 
-  @BelongsTo(() => Fridge)
-  fridge: Fridge;
+  @ManyToOne(() => Fridge)
+  @JoinColumn({ name: 'fridge_id' })
+  fridge: Recipe;
 }

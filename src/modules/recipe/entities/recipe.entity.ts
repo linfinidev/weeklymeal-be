@@ -1,13 +1,16 @@
-import { Table, Column, Model } from 'sequelize-typescript';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Table
-export class Recipe extends Model {
-  @Column
+@Entity()
+export class Recipe {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
   name: string;
 
-  @Column
+  @Column()
   content: string;
 
-  @Column
+  @Column()
   img_url: string;
 }

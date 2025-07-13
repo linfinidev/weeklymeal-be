@@ -1,24 +1,27 @@
+import { Recipe } from '@/modules/recipe/entities/recipe.entity';
 import {
-  Table,
+  Entity,
+  PrimaryGeneratedColumn,
   Column,
-  Model,
-  ForeignKey,
-  BelongsTo,
-} from 'sequelize-typescript';
-import { Recipe } from 'src/modules/recipe/entities/recipe.entity';
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
-@Table
-export class Meal extends Model {
-  @Column
+@Entity()
+export class Meal {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
   date: string;
 
-  @Column
+  @Column()
   type: string;
 
-  @ForeignKey(() => Recipe)
-  @Column
+  @Column({ type: 'uuid' })
   recipe_id: string;
 
-  @BelongsTo(() => Recipe)
+  @ManyToOne(() => Recipe)
+  @JoinColumn({ name: 'recipe_id' })
   recipe: Recipe;
 }

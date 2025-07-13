@@ -1,10 +1,13 @@
-import { Table, Column, Model } from 'sequelize-typescript';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Table
-export class Fridge extends Model {
-  @Column
+@Entity()
+export class Fridge {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
   name: string;
 
-  @Column
+  @Column()
   qty: string;
 }
