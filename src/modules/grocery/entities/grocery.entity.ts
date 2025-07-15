@@ -1,11 +1,10 @@
-import { Fridge } from '@/modules/fridge/entities/fridge.entity';
-import { Recipe } from '@/modules/recipe/entities/recipe.entity';
+import { Ingredient } from '@/modules/ingredient/entities/ingredient.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
 @Entity()
@@ -14,25 +13,18 @@ export class Grocery {
   id: string;
 
   @Column()
-  name: string;
-
-  @Column()
   qty: string;
 
   @Column()
-  date: string;
+  from_date: string;
+
+  @Column()
+  to_date: string;
 
   @Column({ type: 'uuid' })
-  recipe_id: string;
+  ingredient_id: string;
 
-  @ManyToOne(() => Recipe)
-  @JoinColumn({ name: 'recipe_id' })
-  recipe: Recipe;
-
-  @Column({ type: 'uuid' })
-  fridge_id: string;
-
-  @ManyToOne(() => Fridge)
-  @JoinColumn({ name: 'fridge_id' })
-  fridge: Recipe;
+  @OneToOne(() => Ingredient)
+  @JoinColumn({ name: 'ingredient_id' })
+  ingredient: Ingredient;
 }

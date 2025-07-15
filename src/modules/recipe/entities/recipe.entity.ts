@@ -13,4 +13,7 @@ export class Recipe {
 
   @Column()
   img_url: string;
+
+  @Column('uuid', { array: true })
+  ingredients: string[];
 }

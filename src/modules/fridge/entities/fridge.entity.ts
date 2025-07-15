@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Ingredient } from '@/modules/ingredient/entities/ingredient.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class Fridge {
@@ -6,8 +13,18 @@ export class Fridge {
   id: string;
 
   @Column()
-  name: string;
+  qty: string;
 
   @Column()
-  qty: string;
+  bought_date: string;
+
+  @Column()
+  expired_date: string;
+
+  @Column({ type: 'uuid' })
+  ingredient_id: string;
+
+  @OneToOne(() => Ingredient)
+  @JoinColumn({ name: 'ingredient_id' })
+  ingredient: Ingredient;
 }
