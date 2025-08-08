@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Ingredient } from '@/modules/ingredient/entities/ingredient.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 
 @Entity()
 export class Recipe {
@@ -8,12 +15,13 @@ export class Recipe {
   @Column()
   name: string;
 
-  @Column()
+  @Column('text')
   content: string;
 
   @Column()
   img_url: string;
 
-  @Column('uuid', { array: true })
-  ingredients: string[];
+  @ManyToMany(() => Ingredient)
+  @JoinTable()
+  ingredients: Ingredient[];
 }
