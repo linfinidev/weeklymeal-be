@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Logger,
 } from '@nestjs/common';
 import { IngredientService } from './ingredient.service';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
@@ -13,21 +14,19 @@ import { UpdateIngredientDto } from './dto/update-ingredient.dto';
 
 @Controller('ingredient')
 export class IngredientController {
+  private readonly logger = new Logger(IngredientService.name);
   constructor(private readonly ingredientService: IngredientService) {}
 
   @Post()
   create(@Body() createIngredientDto: CreateIngredientDto) {
+    this.logger.log('create ingredient');
     return this.ingredientService.create(createIngredientDto);
   }
 
-  @Get()
-  findAll() {
-    return this.ingredientService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ingredientService.findOne(+id);
+  @Get(':name')
+  findAll(@Param('name') name: string) {
+    this.logger.log('find by ingredient name');
+    return this.ingredientService.findAll(name);
   }
 
   @Patch(':id')
@@ -35,11 +34,13 @@ export class IngredientController {
     @Param('id') id: string,
     @Body() updateIngredientDto: UpdateIngredientDto,
   ) {
-    return this.ingredientService.update(+id, updateIngredientDto);
+    this.logger.log('update ingredient');
+    return this.ingredientService.update(id, updateIngredientDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.ingredientService.remove(+id);
+    this.logger.log('remove ingredient');
+    return this.ingredientService.remove(id);
   }
 }
