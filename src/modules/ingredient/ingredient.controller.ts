@@ -3,10 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   Logger,
+  Query,
 } from '@nestjs/common';
 import { IngredientService } from './ingredient.service';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
@@ -23,13 +24,13 @@ export class IngredientController {
     return this.ingredientService.create(createIngredientDto);
   }
 
-  @Get(':name')
-  findAll(@Param('name') name: string) {
+  @Get()
+  findAll(@Query('name') name: string) {
     this.logger.log('find by ingredient name');
     return this.ingredientService.findAll(name);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateIngredientDto: UpdateIngredientDto,
