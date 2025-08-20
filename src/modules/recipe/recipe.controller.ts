@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Logger,
+  Query,
 } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
@@ -24,7 +25,7 @@ export class RecipeController {
   }
 
   @Get()
-  findAll(@Param('name') name: string) {
+  findAll(@Query('name') name: string) {
     this.logger.log('find by recipe name');
     return this.recipeService.findAll(name);
   }

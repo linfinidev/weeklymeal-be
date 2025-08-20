@@ -45,6 +45,7 @@ export class RecipeService {
       });
       Object.assign(recipe, updateRecipeDto);
       await this.recipeRepository.save(recipe);
+      return successResponse(API_SUCCESS_MSG);
     } catch {
       return errorResponse(API_FAIL_MSG);
     }
