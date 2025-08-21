@@ -1,0 +1,488 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/healthcheck": {
+      "get": {
+        "operationId": "AppController_getHealthcheck",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/ingredient": {
+      "post": {
+        "operationId": "IngredientController_createIngredient",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIngredientDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ingredient created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngredientResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create ingredient",
+        "tags": [
+          "ingredients"
+        ]
+      },
+      "get": {
+        "operationId": "IngredientController_getIngredients",
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all ingredients",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IngredientResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get ingredients",
+        "tags": [
+          "ingredients"
+        ]
+      }
+    },
+    "/ingredient/{id}": {
+      "put": {
+        "operationId": "IngredientController_updateIngredient",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIngredientDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "204": {
+            "description": "Ingredient edited."
+          }
+        },
+        "summary": "Edit ingredient",
+        "tags": [
+          "ingredients"
+        ]
+      },
+      "delete": {
+        "operationId": "IngredientController_removeIngredient",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "204": {
+            "description": "Ingrediennt deleted."
+          }
+        },
+        "summary": "Delete ingredient",
+        "tags": [
+          "ingredients"
+        ]
+      }
+    },
+    "/recipe": {
+      "post": {
+        "operationId": "RecipeController_createRecipe",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecipeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Recipe created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create recipe",
+        "tags": [
+          "recipes"
+        ]
+      },
+      "get": {
+        "operationId": "RecipeController_getRecipes",
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get recipes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecipeResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get recipes",
+        "tags": [
+          "recipes"
+        ]
+      }
+    },
+    "/recipe/{id}": {
+      "get": {
+        "operationId": "RecipeController_getRecipeDetails",
+        "parameters": [
+          {
+            "name": ":id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get recipe by Id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get recipe by Id",
+        "tags": [
+          "recipes"
+        ]
+      },
+      "patch": {
+        "operationId": "RecipeController_updateRecipe",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRecipeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "204": {
+            "description": "Recipe edited."
+          }
+        },
+        "summary": "Edit recipe",
+        "tags": [
+          "recipes"
+        ]
+      },
+      "delete": {
+        "operationId": "RecipeController_removeRecipe",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "204": {
+            "description": "Recipe deleted."
+          }
+        },
+        "summary": "Delete recipe",
+        "tags": [
+          "recipes"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "My API",
+    "description": "Auto-generated OpenAPI spec",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "CreateIngredientDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Tomato"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "IngredientResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "name": {
+            "type": "string",
+            "example": "Tomato"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2025/08/01"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2025/08/01"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateIngredientDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Tomato"
+          }
+        }
+      },
+      "CreateRecipeDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Tomato"
+          },
+          "content": {
+            "type": "string",
+            "example": "Crack 2 eggs,..."
+          },
+          "img_url": {
+            "type": "string",
+            "example": "imgSrc"
+          },
+          "ingredientIds": {
+            "example": [
+              "uuid-1",
+              "uuid-2"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "content",
+          "ingredientIds"
+        ]
+      },
+      "RecipeResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "name": {
+            "type": "string",
+            "example": "Egg soup"
+          },
+          "content": {
+            "type": "string",
+            "example": "- Dice tomato\n- Crack 2 eggs"
+          },
+          "img_url": {
+            "type": "string",
+            "example": "/imgSrc"
+          },
+          "ingredientIds": {
+            "example": [
+              "1",
+              "2"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2025/08/01"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2025/08/01"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "content",
+          "img_url",
+          "ingredientIds",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateRecipeDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Tomato"
+          },
+          "content": {
+            "type": "string",
+            "example": "Crack 2 eggs,..."
+          },
+          "img_url": {
+            "type": "string",
+            "example": "imgSrc"
+          },
+          "ingredientIds": {
+            "example": [
+              "uuid-1",
+              "uuid-2"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      }
+    }
+  }
+}
