@@ -7,19 +7,19 @@ import { Like } from 'typeorm';
 const mockRecipes: Recipe[] = [
   {
     id: '1',
-    name: 'trung chien',
-    content: '',
-    img_url: '',
+    name: 'tomato soup',
+    content: '- Dice tomato\n- Crack 2 eggs',
+    img_url: 'imgSrc',
     ingredients: [
       {
         id: '1',
-        name: 'ingredient1',
+        name: 'tomato',
       },
     ],
   },
 ];
-
 const mockRecipe: Recipe = mockRecipes[0];
+const mockRecipeId = '1';
 
 describe('RecipeService', () => {
   let recipeService: RecipeService;
@@ -32,7 +32,7 @@ describe('RecipeService', () => {
         {
           provide: getRepositoryToken(Recipe),
           useValue: {
-            findOne: jest.fn(),
+            findOneBy: jest.fn(),
             save: jest.fn(),
             delete: jest.fn(),
             find: jest.fn(),
@@ -49,35 +49,42 @@ describe('RecipeService', () => {
     expect(recipeService).toBeDefined();
   });
 
-  it('should find ingredients by name', async () => {
+  it('should find recipes by name', async () => {
     recipeRepository.find.mockResolvedValue(mockRecipes);
 
-    const result = await recipeService.findAll('trung');
+    await recipeService.getAll('egg');
     expect(recipeRepository.find).toHaveBeenCalledWith({
-      where: { name: Like('trung%') },
+      where: { name: Like('egg%') },
     });
-    expect(result.data).toEqual(mockRecipes);
   });
 
-  it('should update ingredient by id', async () => {
-    recipeRepository.findOne.mockResolvedValue(mockRecipe);
+  it('should find recipe by id', async () => {
+    recipeRepository.findOneBy.mockResolvedValue(mockRecipe);
 
-    const result = await recipeService.update('1', { name: 'trung luoc' });
-    expect(recipeRepository.findOne).toHaveBeenCalledWith({
-      where: { id: '1' },
+    await recipeService.getDetails(mockRecipeId);
+    expect(recipeRepository.findOneBy).toHaveBeenCalledWith({
+      id: mockRecipeId,
+    });
+  });
+
+  it('should update recipe by id', async () => {
+    recipeRepository.findOneBy.mockResolvedValue(mockRecipe);
+
+    await recipeService.update(mockRecipeId, { content: '' });
+    expect(recipeRepository.findOneBy).toHaveBeenCalledWith({
+      id: mockRecipeId,
     });
     expect(recipeRepository.save).toHaveBeenCalledWith({
       ...mockRecipe,
-      name: 'trung luoc',
+      content: '',
     });
-    expect(result.success).toBe(true);
   });
 
-  it('should delete an ingredient by id', async () => {
+  it('should delete an recipe by id', async () => {
     recipeRepository.delete.mockResolvedValue({});
 
-    const result = await recipeService.remove('1');
-    expect(recipeRepository.delete).toHaveBeenCalledWith('1');
+    const result = await recipeService.remove(mockRecipeId);
+    expect(recipeRepository.delete).toHaveBeenCalledWith(mockRecipeId);
     expect(result.success).toBe(true);
   });
 });

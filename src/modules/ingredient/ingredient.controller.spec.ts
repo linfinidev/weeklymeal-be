@@ -7,6 +7,19 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Ingredient } from './entities/ingredient.entity';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
 import { UpdateIngredientDto } from './dto/update-ingredient.dto';
+import { IngredientResponseDto } from './dto/response-ingredient.dto';
+
+const mockRes: IngredientResponseDto[] = [
+  {
+    id: '1',
+    name: 'tomato',
+    createdAt: '2025/08/01',
+    updatedAt: '2025/08/01',
+  },
+];
+const mockCreateReq: CreateIngredientDto = { name: 'tomato' };
+const mockUpdateReq: UpdateIngredientDto = { name: 'eggs' };
+const mockIngredientId = '1';
 
 describe('IngredientController', () => {
   let ingredientController: IngredientController;
@@ -38,48 +51,47 @@ describe('IngredientController', () => {
     expect(ingredientController).toBeDefined();
   });
 
-  it('findAll', async () => {
-    const result: Ingredient[] = [{ id: '1', name: 'ca chua' }];
+  it('getAll', async () => {
     jest
-      .spyOn(ingredientService, 'findAll')
+      .spyOn(ingredientService, 'getAll')
       .mockImplementation(() =>
-        Promise.resolve(successResponse(API_SUCCESS_MSG, result)),
+        Promise.resolve(successResponse(API_SUCCESS_MSG, mockRes)),
       );
-    const response = await ingredientController.findAll('');
-    expect(response).toEqual(successResponse(API_SUCCESS_MSG, result));
+    const response = await ingredientController.getIngredients('');
+    expect(response).toEqual(successResponse(API_SUCCESS_MSG, mockRes));
   });
 
   it('create', async () => {
-    const req: CreateIngredientDto = { name: 'ca chua' };
     jest
       .spyOn(ingredientService, 'create')
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
-    const response = await ingredientController.create(req);
+    const response = await ingredientController.createIngredient(mockCreateReq);
     expect(response.success).toBeTruthy();
   });
 
   it('update', async () => {
-    const req: UpdateIngredientDto = { name: 'ca tim' };
-    const id = '1';
     jest
       .spyOn(ingredientService, 'update')
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
-    const response = await ingredientController.update(id, req);
+    const response = await ingredientController.updateIngredient(
+      mockIngredientId,
+      mockUpdateReq,
+    );
     expect(response.success).toBeTruthy();
   });
 
   it('remove', async () => {
-    const id = '1';
     jest
       .spyOn(ingredientService, 'remove')
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
-    const response = await ingredientController.remove(id);
+    const response =
+      await ingredientController.removeIngredient(mockIngredientId);
     expect(response.success).toBeTruthy();
   });
 });
