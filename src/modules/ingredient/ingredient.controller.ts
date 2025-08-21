@@ -12,26 +12,56 @@ import {
 import { IngredientService } from './ingredient.service';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
 import { UpdateIngredientDto } from './dto/update-ingredient.dto';
+import {
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { GenericApiResponse } from '@/common/dto/api-response.dto';
+import { IngredientResponseDto } from './dto/response-ingredient.dto';
 
+@ApiTags('ingredients')
 @Controller('ingredient')
 export class IngredientController {
   private readonly logger = new Logger(IngredientService.name);
   constructor(private readonly ingredientService: IngredientService) {}
 
   @Post()
-  create(@Body() createIngredientDto: CreateIngredientDto) {
+  @ApiOperation({ summary: 'Create ingredient' })
+  @ApiResponse({
+    status: 201,
+    description: 'Ingredient created',
+    type: IngredientResponseDto,
+  })
+  createIngredient(
+    @Body() createIngredientDto: CreateIngredientDto,
+  ): Promise<GenericApiResponse<IngredientResponseDto>> {
     this.logger.log('create ingredient');
     return this.ingredientService.create(createIngredientDto);
   }
 
   @Get()
-  findAll(@Query('name') name: string) {
+  @ApiOperation({ summary: 'Get ingredients' })
+  @ApiQuery({ name: 'name' })
+  @ApiResponse({
+    status: 200,
+    description: 'Get all ingredients',
+    type: [IngredientResponseDto],
+  })
+  getIngredients(
+    @Query('name') name: string,
+  ): Promise<GenericApiResponse<Array<IngredientResponseDto>>> {
     this.logger.log('find by ingredient name');
-    return this.ingredientService.findAll(name);
+    return this.ingredientService.getAll(name);
   }
 
   @Put(':id')
-  update(
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Edit ingredient' })
+  @ApiResponse({ status: 204, description: 'Ingredient edited.' })
+  updateIngredient(
     @Param('id') id: string,
     @Body() updateIngredientDto: UpdateIngredientDto,
   ) {
@@ -40,7 +70,10 @@ export class IngredientController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Delete ingredient' })
+  @ApiResponse({ status: 204, description: 'Ingrediennt deleted.' })
+  removeIngredient(@Param('id') id: string) {
     this.logger.log('remove ingredient');
     return this.ingredientService.remove(id);
   }

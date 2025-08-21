@@ -12,32 +12,83 @@ import {
 import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import {
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { GenericApiResponse } from '@/common/dto/api-response.dto';
+import { RecipeResponseDto } from './dto/response-recipe.dto';
 
+@ApiTags('recipes')
 @Controller('recipe')
 export class RecipeController {
   private readonly logger = new Logger(RecipeService.name);
   constructor(private readonly recipeService: RecipeService) {}
 
   @Post()
-  create(@Body() createRecipeDto: CreateRecipeDto) {
+  @ApiOperation({ summary: 'Create recipe' })
+  @ApiResponse({
+    status: 201,
+    description: 'Recipe created',
+    type: RecipeResponseDto,
+  })
+  createRecipe(
+    @Body() createRecipeDto: CreateRecipeDto,
+  ): Promise<GenericApiResponse<RecipeResponseDto>> {
     this.logger.log('create recipes');
     return this.recipeService.create(createRecipeDto);
   }
 
   @Get()
-  findAll(@Query('name') name: string) {
+  @ApiQuery({ name: 'id' })
+  @ApiOperation({ summary: 'Get recipes' })
+  @ApiResponse({
+    status: 200,
+    description: 'Get recipes',
+    type: [RecipeResponseDto],
+  })
+  getRecipes(
+    @Query('name') name: string,
+  ): Promise<GenericApiResponse<Array<RecipeResponseDto>>> {
     this.logger.log('find by recipe name');
-    return this.recipeService.findAll(name);
+    return this.recipeService.getAll(name);
+  }
+
+  @Get(':id')
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Get recipe by Id' })
+  @ApiResponse({
+    status: 200,
+    description: 'Get recipe by Id',
+    type: RecipeResponseDto,
+  })
+  getRecipeDetails(
+    @Param(':id') id: string,
+  ): Promise<GenericApiResponse<RecipeResponseDto>> {
+    this.logger.log('find by recipe id');
+    return this.recipeService.getDetails(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Edit recipe' })
+  @ApiResponse({ status: 204, description: 'Recipe edited.' })
+  updateRecipe(
+    @Param('id') id: string,
+    @Body() updateRecipeDto: UpdateRecipeDto,
+  ) {
     this.logger.log('update recipe');
     return this.recipeService.update(id, updateRecipeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Delete recipe' })
+  @ApiResponse({ status: 204, description: 'Recipe deleted.' })
+  removeRecipe(@Param('id') id: string) {
     this.logger.log('remove recipe');
     return this.recipeService.remove(id);
   }

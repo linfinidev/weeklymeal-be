@@ -9,6 +9,8 @@ import {
 } from '@/common/utils/api-response.util';
 import { API_SUCCESS_MSG, API_FAIL_MSG } from '@/lib/messages';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { plainToInstance } from 'class-transformer';
+import { RecipeResponseDto } from './dto/response-recipe.dto';
 
 @Injectable()
 export class RecipeService {
@@ -20,19 +22,37 @@ export class RecipeService {
   async create(createRecipeDto: CreateRecipeDto) {
     try {
       const recipe = this.recipeRepository.create(createRecipeDto);
+      const res = plainToInstance(RecipeResponseDto, recipe, {
+        excludeExtraneousValues: true,
+      });
       await this.recipeRepository.save(recipe);
-      return successResponse(API_SUCCESS_MSG);
+      return successResponse(API_SUCCESS_MSG, res);
     } catch {
       return errorResponse(API_FAIL_MSG);
     }
   }
 
-  async findAll(ingredientName: string) {
+  async getAll(recipeName: string) {
     try {
       const recipes = await this.recipeRepository.find({
-        where: { name: Like(`${ingredientName}%`) },
+        where: { name: Like(`${recipeName}%`) },
       });
-      return successResponse(API_SUCCESS_MSG, recipes);
+      const res = plainToInstance(RecipeResponseDto, recipes, {
+        excludeExtraneousValues: true,
+      });
+      return successResponse(API_SUCCESS_MSG, res);
+    } catch {
+      return errorResponse(API_FAIL_MSG);
+    }
+  }
+
+  async getDetails(id: string) {
+    try {
+      const recipe = await this.recipeRepository.findOneBy({ id: id });
+      const res = plainToInstance(RecipeResponseDto, recipe, {
+        excludeExtraneousValues: true,
+      });
+      return successResponse(API_SUCCESS_MSG, res);
     } catch {
       return errorResponse(API_FAIL_MSG);
     }
@@ -40,9 +60,7 @@ export class RecipeService {
 
   async update(id: string, updateRecipeDto: UpdateRecipeDto) {
     try {
-      const recipe = await this.recipeRepository.findOne({
-        where: { id: id },
-      });
+      const recipe = await this.recipeRepository.findOneBy({ id: id });
       Object.assign(recipe, updateRecipeDto);
       await this.recipeRepository.save(recipe);
       return successResponse(API_SUCCESS_MSG);

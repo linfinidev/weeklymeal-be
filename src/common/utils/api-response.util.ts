@@ -1,9 +1,12 @@
-import { ApiResponse } from '../dto/api-response.dto';
+import { GenericApiResponse } from '../dto/api-response.dto';
 
-export function successResponse<T>(message: string, data?: T): ApiResponse<T> {
-  return new ApiResponse({ success: true, message, data });
+export function successResponse<T>(
+  message: string,
+  data?: T,
+): GenericApiResponse<T> {
+  return new GenericApiResponse({ success: true, message, data });
 }
 
-export function errorResponse(message: string): ApiResponse<null> {
-  return new ApiResponse({ success: false, message });
+export function errorResponse(message: string): GenericApiResponse<null> {
+  return new GenericApiResponse({ success: false, message });
 }

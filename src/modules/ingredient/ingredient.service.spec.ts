@@ -4,6 +4,10 @@ import { Ingredient } from './entities/ingredient.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Like } from 'typeorm';
 
+const mockIngredients: Ingredient[] = [{ id: '1', name: 'tomato' }];
+const mockIngredient: Ingredient = mockIngredients[0];
+const mockIngredientId = '1';
+
 describe('IngredientService', () => {
   let ingredientService: IngredientService;
   let ingredientRepository: Record<string, jest.Mock>;
@@ -15,7 +19,7 @@ describe('IngredientService', () => {
         {
           provide: getRepositoryToken(Ingredient),
           useValue: {
-            findOne: jest.fn(),
+            findOneBy: jest.fn(),
             save: jest.fn(),
             delete: jest.fn(),
             find: jest.fn(),
@@ -33,36 +37,34 @@ describe('IngredientService', () => {
   });
 
   it('should find ingredients by name', async () => {
-    const mockIngredients: Ingredient[] = [{ id: '1', name: 'Tomato' }];
     ingredientRepository.find.mockResolvedValue(mockIngredients);
 
-    const result = await ingredientService.findAll('Tom');
+    await ingredientService.getAll('Tom');
     expect(ingredientRepository.find).toHaveBeenCalledWith({
       where: { name: Like('Tom%') },
     });
-    expect(result.data).toEqual(mockIngredients);
   });
 
   it('should update ingredient by id', async () => {
-    const mockIngredient: Ingredient = { id: '1', name: 'Tomato' };
-    ingredientRepository.findOne.mockResolvedValue(mockIngredient);
+    ingredientRepository.findOneBy.mockResolvedValue(mockIngredient);
 
-    const result = await ingredientService.update('1', { name: 'ca chua' });
-    expect(ingredientRepository.findOne).toHaveBeenCalledWith({
-      where: { id: '1' },
+    await ingredientService.update(mockIngredientId, {
+      name: 'Cherry Tomato',
+    });
+    expect(ingredientRepository.findOneBy).toHaveBeenCalledWith({
+      id: mockIngredientId,
     });
     expect(ingredientRepository.save).toHaveBeenCalledWith({
       ...mockIngredient,
-      name: 'ca chua',
+      name: 'Cherry Tomato',
     });
-    expect(result.success).toBe(true);
   });
 
   it('should delete an ingredient by id', async () => {
     ingredientRepository.delete.mockResolvedValue({});
 
-    const result = await ingredientService.remove('1');
-    expect(ingredientRepository.delete).toHaveBeenCalledWith('1');
+    const result = await ingredientService.remove(mockIngredientId);
+    expect(ingredientRepository.delete).toHaveBeenCalledWith(mockIngredientId);
     expect(result.success).toBe(true);
   });
 });

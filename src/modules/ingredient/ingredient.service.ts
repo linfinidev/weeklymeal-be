@@ -9,6 +9,8 @@ import {
   successResponse,
 } from '@/common/utils/api-response.util';
 import { API_FAIL_MSG, API_SUCCESS_MSG } from '@/lib/messages';
+import { plainToInstance } from 'class-transformer';
+import { IngredientResponseDto } from './dto/response-ingredient.dto';
 
 @Injectable()
 export class IngredientService {
@@ -21,18 +23,24 @@ export class IngredientService {
     try {
       const ingredient = this.ingredientRepository.create(createIngredientDto);
       await this.ingredientRepository.save(ingredient);
-      return successResponse(API_SUCCESS_MSG);
+      const res = plainToInstance(IngredientResponseDto, ingredient, {
+        excludeExtraneousValues: true,
+      });
+      return successResponse(API_SUCCESS_MSG, res);
     } catch {
       return errorResponse(API_FAIL_MSG);
     }
   }
 
-  async findAll(ingredientName: string) {
+  async getAll(ingredientName: string) {
     try {
       const ingredients = await this.ingredientRepository.find({
         where: { name: Like(`${ingredientName}%`) },
       });
-      return successResponse(API_SUCCESS_MSG, ingredients);
+      const res = plainToInstance(IngredientResponseDto, ingredients, {
+        excludeExtraneousValues: true,
+      });
+      return successResponse(API_SUCCESS_MSG, res);
     } catch {
       return errorResponse(API_FAIL_MSG);
     }
@@ -40,8 +48,8 @@ export class IngredientService {
 
   async update(id: string, updateIngredientDto: UpdateIngredientDto) {
     try {
-      const ingredient = await this.ingredientRepository.findOne({
-        where: { id: id },
+      const ingredient = await this.ingredientRepository.findOneBy({
+        id: id,
       });
       Object.assign(ingredient, updateIngredientDto);
       await this.ingredientRepository.save(ingredient);

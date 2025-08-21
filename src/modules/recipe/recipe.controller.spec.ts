@@ -7,6 +7,29 @@ import { successResponse } from '@/common/utils/api-response.util';
 import { API_SUCCESS_MSG } from '@/lib/messages';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { RecipeResponseDto } from './dto/response-recipe.dto';
+
+const mockRes: RecipeResponseDto[] = [
+  {
+    id: '1',
+    name: 'tomato soup',
+    content: '- Dice tomato\n- Crack 2 eggs',
+    img_url: 'imgSrc',
+    ingredientIds: ['1', '2'],
+    createdAt: '2025/08/01',
+    updatedAt: '2025/08/01',
+  },
+];
+const mockCreateReq: CreateRecipeDto = {
+  name: 'tomato soup',
+  content: '- Dice tomato\n- Crack 2 eggs',
+  img_url: 'imgSrc',
+  ingredientIds: ['1'],
+};
+const mockUpdateReq: UpdateRecipeDto = {
+  content: '- Dice 2 tomato\n- Crack 2 eggs',
+};
+const mockRecipeId = '1';
 
 describe('RecipeController', () => {
   let recipeController: RecipeController;
@@ -37,69 +60,56 @@ describe('RecipeController', () => {
     expect(recipeController).toBeDefined();
   });
 
-  it('findAll', async () => {
-    const result: Recipe[] = [
-      {
-        id: '1',
-        name: 'trung chien',
-        content: '',
-        img_url: '',
-        ingredients: [
-          {
-            id: '1',
-            name: 'ingredient1',
-          },
-        ],
-      },
-    ];
+  it('getAll', async () => {
     jest
-      .spyOn(recipeService, 'findAll')
+      .spyOn(recipeService, 'getAll')
       .mockImplementation(() =>
-        Promise.resolve(successResponse(API_SUCCESS_MSG, result)),
+        Promise.resolve(successResponse(API_SUCCESS_MSG, mockRes)),
       );
-    const response = await recipeController.findAll('');
-    expect(response).toEqual(successResponse(API_SUCCESS_MSG, result));
+    const response = await recipeController.getRecipes('');
+    expect(response).toEqual(successResponse(API_SUCCESS_MSG, mockRes));
+  });
+
+  it('getDetails', async () => {
+    jest
+      .spyOn(recipeService, 'getDetails')
+      .mockImplementation(() =>
+        Promise.resolve(successResponse(API_SUCCESS_MSG, mockRes[0])),
+      );
+    const response = await recipeController.getRecipeDetails(mockRecipeId);
+    expect(response).toEqual(successResponse(API_SUCCESS_MSG, mockRes[0]));
   });
 
   it('create', async () => {
-    const req: CreateRecipeDto = {
-      name: 'trung chien',
-      content: 'dap trung vo chao, chien',
-      img_url: '',
-      ingredientIds: ['1'],
-    };
     jest
       .spyOn(recipeService, 'create')
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
-    const response = await recipeController.create(req);
+    const response = await recipeController.createRecipe(mockCreateReq);
     expect(response.success).toBeTruthy();
   });
 
   it('update', async () => {
-    const req: UpdateRecipeDto = {
-      name: 'trung chien long dao',
-      content: 'dap trung vo chao, chien lua nho 3 phut',
-    };
-    const id = '1';
     jest
       .spyOn(recipeService, 'update')
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
-    const response = await recipeController.update(id, req);
+    const response = await recipeController.updateRecipe(
+      mockRecipeId,
+      mockUpdateReq,
+    );
     expect(response.success).toBeTruthy();
   });
 
   it('remove', async () => {
-    const id = '1';
     jest
       .spyOn(recipeService, 'remove')
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
-    const response = await recipeController.remove(id);
+    const response = await recipeController.removeRecipe(mockRecipeId);
     expect(response.success).toBeTruthy();
   });
 });
