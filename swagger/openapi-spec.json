@@ -58,7 +58,7 @@
         "parameters": [
           {
             "name": "name",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
               "type": "string"
@@ -114,10 +114,10 @@
             "description": ""
           },
           "204": {
-            "description": "Ingredient edited."
+            "description": "Ingredient updated."
           }
         },
-        "summary": "Edit ingredient",
+        "summary": "Update ingredient",
         "tags": [
           "ingredients"
         ]
@@ -139,10 +139,10 @@
             "description": ""
           },
           "204": {
-            "description": "Ingrediennt deleted."
+            "description": "Ingredient removed."
           }
         },
-        "summary": "Delete ingredient",
+        "summary": "Remove ingredient",
         "tags": [
           "ingredients"
         ]
@@ -184,17 +184,11 @@
         "parameters": [
           {
             "name": "name",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "id",
-            "required": true,
-            "in": "query",
-            "schema": {}
           }
         ],
         "responses": {
@@ -281,10 +275,10 @@
             "description": ""
           },
           "204": {
-            "description": "Recipe edited."
+            "description": "Recipe updated."
           }
         },
-        "summary": "Edit recipe",
+        "summary": "Update recipe",
         "tags": [
           "recipes"
         ]
@@ -306,12 +300,175 @@
             "description": ""
           },
           "204": {
-            "description": "Recipe deleted."
+            "description": "Recipe removed."
           }
         },
-        "summary": "Delete recipe",
+        "summary": "Remove recipe",
         "tags": [
           "recipes"
+        ]
+      }
+    },
+    "/meal": {
+      "post": {
+        "operationId": "MealController_createMeal",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMealDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Meal created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MealResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create meal",
+        "tags": [
+          "meals"
+        ]
+      },
+      "get": {
+        "operationId": "MealController_getMeals",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get meals",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MealResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get meals",
+        "tags": [
+          "meals"
+        ]
+      }
+    },
+    "/meal/{id}": {
+      "get": {
+        "operationId": "MealController_getMealDetails",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get meal details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MealResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get meal details",
+        "tags": [
+          "meals"
+        ]
+      },
+      "patch": {
+        "operationId": "MealController_updateMeal",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMealDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "204": {
+            "description": "Meal updated."
+          }
+        },
+        "summary": "Update meal",
+        "tags": [
+          "meals"
+        ]
+      },
+      "delete": {
+        "operationId": "MealController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "204": {
+            "description": "Meal removed."
+          }
+        },
+        "summary": "Remove meal",
+        "tags": [
+          "meals"
         ]
       }
     }
@@ -348,21 +505,11 @@
           "name": {
             "type": "string",
             "example": "Tomato"
-          },
-          "createdAt": {
-            "type": "string",
-            "example": "2025/08/01"
-          },
-          "updatedAt": {
-            "type": "string",
-            "example": "2025/08/01"
           }
         },
         "required": [
           "id",
-          "name",
-          "createdAt",
-          "updatedAt"
+          "name"
         ]
       },
       "UpdateIngredientDto": {
@@ -372,14 +519,17 @@
             "type": "string",
             "example": "Tomato"
           }
-        }
+        },
+        "required": [
+          "name"
+        ]
       },
       "CreateRecipeDto": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "example": "Tomato"
+            "example": "Egg soup"
           },
           "content": {
             "type": "string",
@@ -387,6 +537,7 @@
           },
           "img_url": {
             "type": "string",
+            "nullable": true,
             "example": "imgSrc"
           },
           "ingredientIds": {
@@ -404,6 +555,7 @@
         "required": [
           "name",
           "content",
+          "img_url",
           "ingredientIds"
         ]
       },
@@ -435,14 +587,6 @@
             "items": {
               "type": "string"
             }
-          },
-          "createdAt": {
-            "type": "string",
-            "example": "2025/08/01"
-          },
-          "updatedAt": {
-            "type": "string",
-            "example": "2025/08/01"
           }
         },
         "required": [
@@ -450,9 +594,7 @@
           "name",
           "content",
           "img_url",
-          "ingredientIds",
-          "createdAt",
-          "updatedAt"
+          "ingredientIds"
         ]
       },
       "UpdateRecipeDto": {
@@ -460,7 +602,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": "Tomato"
+            "example": "Egg soup"
           },
           "content": {
             "type": "string",
@@ -468,6 +610,7 @@
           },
           "img_url": {
             "type": "string",
+            "nullable": true,
             "example": "imgSrc"
           },
           "ingredientIds": {
@@ -481,7 +624,104 @@
               "format": "uuid"
             }
           }
-        }
+        },
+        "required": [
+          "name",
+          "content",
+          "img_url",
+          "ingredientIds"
+        ]
+      },
+      "CreateMealDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2025/08/01"
+          },
+          "type": {
+            "type": "string",
+            "example": "lunch"
+          },
+          "recipe_ids": {
+            "example": [
+              "uuid-1",
+              "uuid-2"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "required": [
+          "date",
+          "type",
+          "recipe_ids"
+        ]
+      },
+      "MealResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "date": {
+            "type": "string",
+            "example": "2025-08-01"
+          },
+          "type": {
+            "type": "string",
+            "example": "lunch"
+          },
+          "recipe_ids": {
+            "example": [
+              "1",
+              "2"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "type",
+          "recipe_ids"
+        ]
+      },
+      "UpdateMealDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2025/08/01"
+          },
+          "type": {
+            "type": "string",
+            "example": "lunch"
+          },
+          "recipe_ids": {
+            "example": [
+              "uuid-1",
+              "uuid-2"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "required": [
+          "date",
+          "type",
+          "recipe_ids"
+        ]
       }
     }
   }

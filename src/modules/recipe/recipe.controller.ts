@@ -19,7 +19,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { GenericApiResponse } from '@/common/dto/api-response.dto';
+import { GenericApiResponse } from '@/common/dtos';
 import { RecipeResponseDto } from './dto/response-recipe.dto';
 
 @ApiTags('recipes')
@@ -43,7 +43,7 @@ export class RecipeController {
   }
 
   @Get()
-  @ApiQuery({ name: 'id' })
+  @ApiQuery({ name: 'name', required: false })
   @ApiOperation({ summary: 'Get recipes' })
   @ApiResponse({
     status: 200,
@@ -51,7 +51,7 @@ export class RecipeController {
     type: [RecipeResponseDto],
   })
   getRecipes(
-    @Query('name') name: string,
+    @Query('name') name?: string,
   ): Promise<GenericApiResponse<Array<RecipeResponseDto>>> {
     this.logger.log('find by recipe name');
     return this.recipeService.getAll(name);
@@ -74,8 +74,8 @@ export class RecipeController {
 
   @Patch(':id')
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Edit recipe' })
-  @ApiResponse({ status: 204, description: 'Recipe edited.' })
+  @ApiOperation({ summary: 'Update recipe' })
+  @ApiResponse({ status: 204, description: 'Recipe updated.' })
   updateRecipe(
     @Param('id') id: string,
     @Body() updateRecipeDto: UpdateRecipeDto,
@@ -86,8 +86,8 @@ export class RecipeController {
 
   @Delete(':id')
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Delete recipe' })
-  @ApiResponse({ status: 204, description: 'Recipe deleted.' })
+  @ApiOperation({ summary: 'Remove recipe' })
+  @ApiResponse({ status: 204, description: 'Recipe removed.' })
   removeRecipe(@Param('id') id: string) {
     this.logger.log('remove recipe');
     return this.recipeService.remove(id);

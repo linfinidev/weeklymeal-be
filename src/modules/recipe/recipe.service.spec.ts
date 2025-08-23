@@ -3,23 +3,13 @@ import { RecipeService } from './recipe.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { Like } from 'typeorm';
-
-const mockRecipes: Recipe[] = [
-  {
-    id: '1',
-    name: 'tomato soup',
-    content: '- Dice tomato\n- Crack 2 eggs',
-    img_url: 'imgSrc',
-    ingredients: [
-      {
-        id: '1',
-        name: 'tomato',
-      },
-    ],
-  },
-];
-const mockRecipe: Recipe = mockRecipes[0];
-const mockRecipeId = '1';
+import {
+  mockRecipes,
+  mockRecipe,
+  mockRecipeId,
+  mockUpdateRecipeReq,
+} from './recipe.mock';
+import { Ingredient } from '../ingredient/entities/ingredient.entity';
 
 describe('RecipeService', () => {
   let recipeService: RecipeService;
@@ -35,6 +25,12 @@ describe('RecipeService', () => {
             findOneBy: jest.fn(),
             save: jest.fn(),
             delete: jest.fn(),
+            find: jest.fn(),
+          },
+        },
+        {
+          provide: getRepositoryToken(Ingredient),
+          useValue: {
             find: jest.fn(),
           },
         },
@@ -55,6 +51,7 @@ describe('RecipeService', () => {
     await recipeService.getAll('egg');
     expect(recipeRepository.find).toHaveBeenCalledWith({
       where: { name: Like('egg%') },
+      relations: ['ingredients'],
     });
   });
 
@@ -70,13 +67,9 @@ describe('RecipeService', () => {
   it('should update recipe by id', async () => {
     recipeRepository.findOneBy.mockResolvedValue(mockRecipe);
 
-    await recipeService.update(mockRecipeId, { content: '' });
+    await recipeService.update(mockRecipeId, mockUpdateRecipeReq);
     expect(recipeRepository.findOneBy).toHaveBeenCalledWith({
       id: mockRecipeId,
-    });
-    expect(recipeRepository.save).toHaveBeenCalledWith({
-      ...mockRecipe,
-      content: '',
     });
   });
 

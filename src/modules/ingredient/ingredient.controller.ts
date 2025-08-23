@@ -19,7 +19,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { GenericApiResponse } from '@/common/dto/api-response.dto';
+import { GenericApiResponse } from '@/common/dtos';
 import { IngredientResponseDto } from './dto/response-ingredient.dto';
 
 @ApiTags('ingredients')
@@ -44,14 +44,14 @@ export class IngredientController {
 
   @Get()
   @ApiOperation({ summary: 'Get ingredients' })
-  @ApiQuery({ name: 'name' })
+  @ApiQuery({ name: 'name', required: false })
   @ApiResponse({
     status: 200,
     description: 'Get all ingredients',
     type: [IngredientResponseDto],
   })
   getIngredients(
-    @Query('name') name: string,
+    @Query('name') name?: string,
   ): Promise<GenericApiResponse<Array<IngredientResponseDto>>> {
     this.logger.log('find by ingredient name');
     return this.ingredientService.getAll(name);
@@ -59,8 +59,8 @@ export class IngredientController {
 
   @Put(':id')
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Edit ingredient' })
-  @ApiResponse({ status: 204, description: 'Ingredient edited.' })
+  @ApiOperation({ summary: 'Update ingredient' })
+  @ApiResponse({ status: 204, description: 'Ingredient updated.' })
   updateIngredient(
     @Param('id') id: string,
     @Body() updateIngredientDto: UpdateIngredientDto,
@@ -71,8 +71,8 @@ export class IngredientController {
 
   @Delete(':id')
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Delete ingredient' })
-  @ApiResponse({ status: 204, description: 'Ingrediennt deleted.' })
+  @ApiOperation({ summary: 'Remove ingredient' })
+  @ApiResponse({ status: 204, description: 'Ingredient removed.' })
   removeIngredient(@Param('id') id: string) {
     this.logger.log('remove ingredient');
     return this.ingredientService.remove(id);

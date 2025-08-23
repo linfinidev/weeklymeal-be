@@ -9,12 +9,4 @@ export class IngredientResponseDto {
   @ApiProperty({ example: 'Tomato' })
   @Expose()
   name: string;
-
-  @ApiProperty({ example: '2025/08/01' })
-  @Expose()
-  createdAt: string;
-
-  @ApiProperty({ example: '2025/08/01' })
-  @Expose()
-  updatedAt: string;
 }
