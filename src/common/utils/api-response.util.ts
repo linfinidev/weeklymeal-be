@@ -1,4 +1,4 @@
-import { GenericApiResponse } from '../dto/api-response.dto';
+import { GenericApiResponse } from '../dtos';
 
 export function successResponse<T>(
   message: string,

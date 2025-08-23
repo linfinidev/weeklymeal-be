@@ -7,8 +7,8 @@ import { Like, Repository } from 'typeorm';
 import {
   errorResponse,
   successResponse,
-} from '@/common/utils/api-response.util';
-import { API_FAIL_MSG, API_SUCCESS_MSG } from '@/lib/messages';
+} from '@/common/utils';
+import { API_FAIL_MSG, API_SUCCESS_MSG } from '@/common/constants/messages';
 import { plainToInstance } from 'class-transformer';
 import { IngredientResponseDto } from './dto/response-ingredient.dto';
 
@@ -32,10 +32,10 @@ export class IngredientService {
     }
   }
 
-  async getAll(ingredientName: string) {
+  async getAll(ingredientName?: string) {
     try {
       const ingredients = await this.ingredientRepository.find({
-        where: { name: Like(`${ingredientName}%`) },
+        where: { name: Like(`${ingredientName || ''}%`) },
       });
       const res = plainToInstance(IngredientResponseDto, ingredients, {
         excludeExtraneousValues: true,

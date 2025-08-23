@@ -3,10 +3,11 @@ import { IngredientService } from './ingredient.service';
 import { Ingredient } from './entities/ingredient.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Like } from 'typeorm';
-
-const mockIngredients: Ingredient[] = [{ id: '1', name: 'tomato' }];
-const mockIngredient: Ingredient = mockIngredients[0];
-const mockIngredientId = '1';
+import {
+  mockIngredients,
+  mockIngredient,
+  mockIngredientId,
+} from './ingredient.mock';
 
 describe('IngredientService', () => {
   let ingredientService: IngredientService;

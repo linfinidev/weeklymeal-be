@@ -26,11 +26,21 @@ $ npm run debug
 # production mode
 $ npm run prod
 ```
+## Migrations
+
+```bash
+# generate migration file
+$ npm run typeorm:generate-migration
+
+# run migration
+$ npm run typeorm:run-migrations
+```
+
 
 ## Generate API Documentation
 
 ```bash
-# swagger UI
+# swagger UI (available when project is running)
 localhost:8080/api/docs
 
 # generate swagger documentation on FE

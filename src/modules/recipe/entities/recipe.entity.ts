@@ -5,6 +5,8 @@ import {
   Column,
   ManyToMany,
   JoinTable,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -12,16 +14,22 @@ export class Recipe {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
-  @Column('text')
+  @Column('text', { nullable: false })
   content: string;
 
-  @Column()
+  @Column({ nullable: true })
   img_url: string;
 
   @ManyToMany(() => Ingredient)
   @JoinTable()
   ingredients: Ingredient[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -1,8 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsArray, IsUUID } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsArray,
+  IsUUID,
+  IsDefined,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateRecipeDto {
-  @ApiProperty({ required: true, example: 'Tomato' })
+  @ApiProperty({ required: true, example: 'Egg soup' })
+  @IsDefined({ message: 'name is required' })
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -12,7 +20,9 @@ export class CreateRecipeDto {
   @IsNotEmpty()
   content: string;
 
-  @ApiProperty({ required: false, example: 'imgSrc' })
+  @ApiProperty({ required: true, nullable: true, example: 'imgSrc' })
+  @IsString()
+  @IsOptional()
   img_url: string;
 
   @ApiProperty({

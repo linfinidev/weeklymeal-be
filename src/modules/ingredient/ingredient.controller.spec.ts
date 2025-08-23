@@ -1,25 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { IngredientController } from './ingredient.controller';
 import { IngredientService } from './ingredient.service';
-import { successResponse } from '@/common/utils/api-response.util';
-import { API_SUCCESS_MSG } from '@/lib/messages';
+import { successResponse } from '@/common/utils';
+import { API_SUCCESS_MSG } from '@/common/constants/messages';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Ingredient } from './entities/ingredient.entity';
-import { CreateIngredientDto } from './dto/create-ingredient.dto';
-import { UpdateIngredientDto } from './dto/update-ingredient.dto';
-import { IngredientResponseDto } from './dto/response-ingredient.dto';
-
-const mockRes: IngredientResponseDto[] = [
-  {
-    id: '1',
-    name: 'tomato',
-    createdAt: '2025/08/01',
-    updatedAt: '2025/08/01',
-  },
-];
-const mockCreateReq: CreateIngredientDto = { name: 'tomato' };
-const mockUpdateReq: UpdateIngredientDto = { name: 'eggs' };
-const mockIngredientId = '1';
+import {
+  mockCreateIngredientReq,
+  mockIngredientsRes,
+  mockUpdateIngredientReq,
+} from './ingredient.mock';
+import { mockIngredientId } from './ingredient.mock';
 
 describe('IngredientController', () => {
   let ingredientController: IngredientController;
@@ -55,10 +46,12 @@ describe('IngredientController', () => {
     jest
       .spyOn(ingredientService, 'getAll')
       .mockImplementation(() =>
-        Promise.resolve(successResponse(API_SUCCESS_MSG, mockRes)),
+        Promise.resolve(successResponse(API_SUCCESS_MSG, mockIngredientsRes)),
       );
     const response = await ingredientController.getIngredients('');
-    expect(response).toEqual(successResponse(API_SUCCESS_MSG, mockRes));
+    expect(response).toEqual(
+      successResponse(API_SUCCESS_MSG, mockIngredientsRes),
+    );
   });
 
   it('create', async () => {
@@ -67,7 +60,9 @@ describe('IngredientController', () => {
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
-    const response = await ingredientController.createIngredient(mockCreateReq);
+    const response = await ingredientController.createIngredient(
+      mockCreateIngredientReq,
+    );
     expect(response.success).toBeTruthy();
   });
 
@@ -79,7 +74,7 @@ describe('IngredientController', () => {
       );
     const response = await ingredientController.updateIngredient(
       mockIngredientId,
-      mockUpdateReq,
+      mockUpdateIngredientReq,
     );
     expect(response.success).toBeTruthy();
   });

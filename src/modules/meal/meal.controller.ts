@@ -6,37 +6,89 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  Logger,
 } from '@nestjs/common';
 import { MealService } from './meal.service';
 import { CreateMealDto } from './dto/create-meal.dto';
 import { UpdateMealDto } from './dto/update-meal.dto';
+import {
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { MealResponseDto } from './dto/response-meal.dto';
+import { GenericApiResponse } from '@/common/dtos';
 
+@ApiTags('meals')
 @Controller('meal')
 export class MealController {
+  private readonly logger = new Logger(MealService.name);
   constructor(private readonly mealService: MealService) {}
 
   @Post()
-  create(@Body() createMealDto: CreateMealDto) {
+  @ApiOperation({ summary: 'Create meal' })
+  @ApiResponse({
+    status: 201,
+    description: 'Meal created',
+    type: MealResponseDto,
+  })
+  createMeal(
+    @Body() createMealDto: CreateMealDto,
+  ): Promise<GenericApiResponse<MealResponseDto>> {
+    this.logger.log('create meal');
     return this.mealService.create(createMealDto);
   }
 
   @Get()
-  findAll() {
-    return this.mealService.findAll();
+  @ApiQuery({ name: 'startDate', required: true })
+  @ApiQuery({ name: 'endDate', required: true })
+  @ApiOperation({ summary: 'Get meals' })
+  @ApiResponse({
+    status: 200,
+    description: 'Get meals',
+    type: [MealResponseDto],
+  })
+  getMeals(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+  ): Promise<GenericApiResponse<Array<MealResponseDto>>> {
+    this.logger.log('find meals between start date and end date');
+    return this.mealService.getAll(startDate, endDate);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.mealService.findOne(+id);
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Get meal details' })
+  @ApiResponse({
+    status: 200,
+    description: 'Get meal details',
+    type: MealResponseDto,
+  })
+  getMealDetails(
+    @Param('id') id: string,
+  ): Promise<GenericApiResponse<MealResponseDto>> {
+    this.logger.log('get meal details');
+    return this.mealService.getDetails(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMealDto: UpdateMealDto) {
-    return this.mealService.update(+id, updateMealDto);
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Update meal' })
+  @ApiResponse({ status: 204, description: 'Meal updated.' })
+  updateMeal(@Param('id') id: string, @Body() updateMealDto: UpdateMealDto) {
+    this.logger.log('update meal details');
+    return this.mealService.update(id, updateMealDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.mealService.remove(+id);
+  @ApiParam({ name: 'id' })
+  @ApiOperation({ summary: 'Remove meal' })
+  @ApiResponse({ status: 204, description: 'Meal removed.' })
+  removeMeal(@Param('id') id: string) {
+    this.logger.log('delete meal');
+    return this.mealService.remove(id);
   }
 }
