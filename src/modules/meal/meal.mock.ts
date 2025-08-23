@@ -1,0 +1,63 @@
+import { CreateMealDto } from './dto/create-meal.dto';
+import { MealResponseDto } from './dto/response-meal.dto';
+import { UpdateMealDto } from './dto/update-meal.dto';
+import { Meal } from './entities/meal.entity';
+
+export const startDate = '2025/08/01';
+
+export const endDate = '2025/08/31';
+
+export const mockMealId = '1';
+
+export const mockMealsRes: MealResponseDto[] = [
+  {
+    id: '1',
+    date: '2025-08-01',
+    type: 'lunch',
+    recipe_ids: ['1', '2'],
+  },
+];
+
+export const mockMealRes: MealResponseDto = mockMealsRes[0];
+
+export const mockCreateMealReq: CreateMealDto = {
+  date: '2025/08/01',
+  type: 'lunch',
+  recipe_ids: ['uuid-1', 'uuid-2'],
+};
+
+export const mockUpdateMealReq: UpdateMealDto = {
+  date: '2025/08/01',
+  type: 'dinner',
+  recipe_ids: ['uuid-1', 'uuid-2'],
+};
+
+export const mockMeals: Meal[] = [
+  {
+    id: '1',
+    date: new Date('2025-08-01'),
+    type: 'lunch',
+    recipes: [
+      {
+        id: '1',
+        name: 'tomato soup',
+        content: '- Dice tomato\n- Crack 2 eggs',
+        img_url: 'imgSrc',
+        ingredients: [
+          {
+            id: '1',
+            name: 'tomato',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        ],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
+
+export const mockMeal: Meal = mockMeals[0];

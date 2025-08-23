@@ -3,8 +3,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
-  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity()
@@ -12,16 +14,19 @@ export class Meal {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  date: string;
+  @Column({ type: 'date' })
+  date: Date;
 
   @Column()
   type: string;
 
-  @Column({ type: 'uuid' })
-  recipe_id: string;
+  @ManyToMany(() => Recipe)
+  @JoinTable()
+  recipes: Recipe[];
 
-  @ManyToOne(() => Recipe)
-  @JoinColumn({ name: 'recipe_id' })
-  recipe: Recipe;
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -13,6 +13,8 @@ export const mockRecipesRes: RecipeResponseDto[] = [
   },
 ];
 
+export const mockRecipeRes: RecipeResponseDto = mockRecipesRes[0];
+
 export const mockCreateRecipeReq: CreateRecipeDto = {
   name: 'tomato soup',
   content: '- Dice tomato\n- Crack 2 eggs',

@@ -447,7 +447,7 @@
         ]
       },
       "delete": {
-        "operationId": "MealController_remove",
+        "operationId": "MealController_removeMeal",
         "parameters": [
           {
             "name": "id",
