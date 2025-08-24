@@ -14,7 +14,13 @@ export class Meal {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'date' })
+  @Column({
+    type: 'date',
+    transformer: {
+      to: (value: Date) => value, // store as is
+      from: (value: string) => new Date(value), // parse string to Date
+    },
+  })
   date: Date;
 
   @Column()

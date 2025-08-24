@@ -21,6 +21,7 @@ import {
 } from '@nestjs/swagger';
 import { MealResponseDto } from './dto/response-meal.dto';
 import { GenericApiResponse } from '@/common/dtos';
+import { MealListItemResponseDto } from './dto/response-meal-list-item.dto';
 
 @ApiTags('meals')
 @Controller('meal')
@@ -49,12 +50,12 @@ export class MealController {
   @ApiResponse({
     status: 200,
     description: 'Get meals',
-    type: [MealResponseDto],
+    type: [MealListItemResponseDto],
   })
   getMeals(
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
-  ): Promise<GenericApiResponse<Array<MealResponseDto>>> {
+  ): Promise<GenericApiResponse<Array<MealListItemResponseDto>>> {
     this.logger.log('find meals between start date and end date');
     return this.mealService.getAll(startDate, endDate);
   }
