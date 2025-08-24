@@ -29,8 +29,8 @@ $ npm run prod
 ## Migrations
 
 ```bash
-# generate migration file
-$ npm run typeorm:generate-migration
+# generate migration file, replace 'something' with what you did
+$ npm run typeorm:generate-migration --name=something
 
 # run migration
 $ npm run typeorm:run-migrations

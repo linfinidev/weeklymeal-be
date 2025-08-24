@@ -6,8 +6,8 @@ import { Meal } from './entities/meal.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   mapToMealDto,
-  mapToMealDtos,
   mapToMealEntity,
+  mapToMealListDtos,
 } from '@/mappers/mealMapper';
 import { successResponse, errorResponse } from '@/common/utils';
 import { API_SUCCESS_MSG, API_FAIL_MSG } from '@/common/constants/messages';
@@ -44,7 +44,7 @@ export class MealService {
         where: { date: Between(new Date(startDate), new Date(endDate)) },
         relations: ['recipes', 'recipes.ingredients'],
       });
-      const res = mapToMealDtos(meals);
+      const res = mapToMealListDtos(meals, startDate, endDate);
       return successResponse(API_SUCCESS_MSG, res);
     } catch {
       return errorResponse(API_FAIL_MSG);

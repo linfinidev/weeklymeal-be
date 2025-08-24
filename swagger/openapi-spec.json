@@ -368,7 +368,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/MealResponseDto"
+                    "$ref": "#/components/schemas/MealListItemResponseDto"
                   }
                 }
               }
@@ -692,6 +692,59 @@
           "date",
           "type",
           "recipe_ids"
+        ]
+      },
+      "MealItemResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "recipe_ids": {
+            "example": [
+              "1",
+              "2"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "recipe_ids"
+        ]
+      },
+      "MealListItemResponseDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2025-08-01"
+          },
+          "lunch": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MealItemResponseDto"
+              }
+            ]
+          },
+          "dinner": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MealItemResponseDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "date",
+          "lunch",
+          "dinner"
         ]
       },
       "UpdateMealDto": {
