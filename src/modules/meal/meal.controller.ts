@@ -23,14 +23,14 @@ import { MealResponseDto } from './dto/response-meal.dto';
 import { GenericApiResponse } from '@/common/dtos';
 import { MealListItemResponseDto } from './dto/response-meal-list-item.dto';
 
-@ApiTags('meals')
+@ApiTags('Default')
 @Controller('meal')
 export class MealController {
   private readonly logger = new Logger(MealService.name);
   constructor(private readonly mealService: MealService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create meal' })
+  @ApiOperation({ operationId: 'createMeal', summary: 'Create meal' })
   @ApiResponse({
     status: 201,
     description: 'Meal created',
@@ -46,7 +46,7 @@ export class MealController {
   @Get()
   @ApiQuery({ name: 'startDate', required: true })
   @ApiQuery({ name: 'endDate', required: true })
-  @ApiOperation({ summary: 'Get meals' })
+  @ApiOperation({ operationId: 'getMeals', summary: 'Get meals' })
   @ApiResponse({
     status: 200,
     description: 'Get meals',
@@ -62,7 +62,7 @@ export class MealController {
 
   @Get(':id')
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Get meal details' })
+  @ApiOperation({ operationId: 'getMealDetails', summary: 'Get meal details' })
   @ApiResponse({
     status: 200,
     description: 'Get meal details',
@@ -77,7 +77,7 @@ export class MealController {
 
   @Patch(':id')
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Update meal' })
+  @ApiOperation({ operationId: 'updateMeal', summary: 'Update meal' })
   @ApiResponse({ status: 204, description: 'Meal updated.' })
   updateMeal(@Param('id') id: string, @Body() updateMealDto: UpdateMealDto) {
     this.logger.log('update meal details');
@@ -86,7 +86,7 @@ export class MealController {
 
   @Delete(':id')
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Remove meal' })
+  @ApiOperation({ operationId: 'removeMeal', summary: 'Remove meal' })
   @ApiResponse({ status: 204, description: 'Meal removed.' })
   removeMeal(@Param('id') id: string) {
     this.logger.log('delete meal');
