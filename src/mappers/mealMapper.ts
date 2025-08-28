@@ -28,14 +28,10 @@ export const mapToMealDto = (entity: Meal): MealResponseDto => {
   return dto;
 };
 
-export const mapToMealDtos = (entities: Meal[]): MealResponseDto[] => {
-  return entities.map(mapToMealDto);
-};
-
 export const mapToMealItemDto = (entity: Meal): MealItemResponseDto => {
   const dto = new MealItemResponseDto();
   dto.id = entity.id;
-  dto.recipe_names = entity.recipes.map((i) => i.name);
+  dto.recipe_names = entity.recipes.map((i) => i.id);
   return dto;
 };
 

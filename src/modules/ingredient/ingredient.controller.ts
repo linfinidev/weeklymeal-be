@@ -22,14 +22,17 @@ import {
 import { GenericApiResponse } from '@/common/dtos';
 import { IngredientResponseDto } from './dto/response-ingredient.dto';
 
-@ApiTags('ingredients')
+@ApiTags('Default')
 @Controller('ingredient')
 export class IngredientController {
   private readonly logger = new Logger(IngredientService.name);
   constructor(private readonly ingredientService: IngredientService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create ingredient' })
+  @ApiOperation({
+    operationId: 'createIngredient',
+    summary: 'Create ingredient',
+  })
   @ApiResponse({
     status: 201,
     description: 'Ingredient created',
@@ -43,7 +46,10 @@ export class IngredientController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get ingredients' })
+  @ApiOperation({
+    operationId: 'getIngredients',
+    summary: 'Get ingredients',
+  })
   @ApiQuery({ name: 'name', required: false })
   @ApiResponse({
     status: 200,
@@ -59,7 +65,10 @@ export class IngredientController {
 
   @Put(':id')
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Update ingredient' })
+  @ApiOperation({
+    operationId: 'updateIngredient',
+    summary: 'Update ingredient',
+  })
   @ApiResponse({ status: 204, description: 'Ingredient updated.' })
   updateIngredient(
     @Param('id') id: string,
@@ -71,7 +80,10 @@ export class IngredientController {
 
   @Delete(':id')
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Remove ingredient' })
+  @ApiOperation({
+    operationId: 'removeIngredient',
+    summary: 'Remove ingredient',
+  })
   @ApiResponse({ status: 204, description: 'Ingredient removed.' })
   removeIngredient(@Param('id') id: string) {
     this.logger.log('remove ingredient');

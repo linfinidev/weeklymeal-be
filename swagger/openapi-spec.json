@@ -24,7 +24,7 @@
     },
     "/ingredient": {
       "post": {
-        "operationId": "IngredientController_createIngredient",
+        "operationId": "createIngredient",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -50,11 +50,11 @@
         },
         "summary": "Create ingredient",
         "tags": [
-          "ingredients"
+          "Default"
         ]
       },
       "get": {
-        "operationId": "IngredientController_getIngredients",
+        "operationId": "getIngredients",
         "parameters": [
           {
             "name": "name",
@@ -82,13 +82,13 @@
         },
         "summary": "Get ingredients",
         "tags": [
-          "ingredients"
+          "Default"
         ]
       }
     },
     "/ingredient/{id}": {
       "put": {
-        "operationId": "IngredientController_updateIngredient",
+        "operationId": "updateIngredient",
         "parameters": [
           {
             "name": "id",
@@ -119,11 +119,11 @@
         },
         "summary": "Update ingredient",
         "tags": [
-          "ingredients"
+          "Default"
         ]
       },
       "delete": {
-        "operationId": "IngredientController_removeIngredient",
+        "operationId": "removeIngredient",
         "parameters": [
           {
             "name": "id",
@@ -144,13 +144,13 @@
         },
         "summary": "Remove ingredient",
         "tags": [
-          "ingredients"
+          "Default"
         ]
       }
     },
     "/recipe": {
       "post": {
-        "operationId": "RecipeController_createRecipe",
+        "operationId": "createRecipe",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -176,7 +176,7 @@
         },
         "summary": "Create recipe",
         "tags": [
-          "recipes"
+          "Default"
         ]
       },
       "get": {
@@ -213,13 +213,13 @@
         },
         "summary": "Get recipes",
         "tags": [
-          "recipes"
+          "Default"
         ]
       }
     },
     "/recipe/{id}": {
       "get": {
-        "operationId": "RecipeController_getRecipeDetails",
+        "operationId": "getRecipeDetails",
         "parameters": [
           {
             "name": ":id",
@@ -250,11 +250,11 @@
         },
         "summary": "Get recipe by Id",
         "tags": [
-          "recipes"
+          "Default"
         ]
       },
       "patch": {
-        "operationId": "RecipeController_updateRecipe",
+        "operationId": "updateRecipe",
         "parameters": [
           {
             "name": "id",
@@ -285,11 +285,11 @@
         },
         "summary": "Update recipe",
         "tags": [
-          "recipes"
+          "Default"
         ]
       },
       "delete": {
-        "operationId": "RecipeController_removeRecipe",
+        "operationId": "removeRecipe",
         "parameters": [
           {
             "name": "id",
@@ -310,13 +310,13 @@
         },
         "summary": "Remove recipe",
         "tags": [
-          "recipes"
+          "Default"
         ]
       }
     },
     "/meal": {
       "post": {
-        "operationId": "MealController_createMeal",
+        "operationId": "createMeal",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -342,11 +342,11 @@
         },
         "summary": "Create meal",
         "tags": [
-          "meals"
+          "Default"
         ]
       },
       "get": {
-        "operationId": "MealController_getMeals",
+        "operationId": "getMeals",
         "parameters": [
           {
             "name": "startDate",
@@ -382,13 +382,13 @@
         },
         "summary": "Get meals",
         "tags": [
-          "meals"
+          "Default"
         ]
       }
     },
     "/meal/{id}": {
       "get": {
-        "operationId": "MealController_getMealDetails",
+        "operationId": "getMealDetails",
         "parameters": [
           {
             "name": "id",
@@ -413,11 +413,11 @@
         },
         "summary": "Get meal details",
         "tags": [
-          "meals"
+          "Default"
         ]
       },
       "patch": {
-        "operationId": "MealController_updateMeal",
+        "operationId": "updateMeal",
         "parameters": [
           {
             "name": "id",
@@ -448,11 +448,11 @@
         },
         "summary": "Update meal",
         "tags": [
-          "meals"
+          "Default"
         ]
       },
       "delete": {
-        "operationId": "MealController_removeMeal",
+        "operationId": "removeMeal",
         "parameters": [
           {
             "name": "id",
@@ -473,7 +473,7 @@
         },
         "summary": "Remove meal",
         "tags": [
-          "meals"
+          "Default"
         ]
       }
     }

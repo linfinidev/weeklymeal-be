@@ -25,7 +25,7 @@ import { RecipeResponseDto } from './dto/response-recipe.dto';
 import { RecipeListResponseDto } from './dto/response-recipe-list.dto';
 import { PaginatedDto } from '@/common/dtos/api-paginated.dto';
 
-@ApiTags('recipes')
+@ApiTags('Default')
 @Controller('recipe')
 @ApiExtraModels(PaginatedDto)
 export class RecipeController {
@@ -33,7 +33,7 @@ export class RecipeController {
   constructor(private readonly recipeService: RecipeService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create recipe' })
+  @ApiOperation({ operationId: 'createRecipe', summary: 'Create recipe' })
   @ApiResponse({
     status: 201,
     description: 'Recipe created',
@@ -65,7 +65,10 @@ export class RecipeController {
 
   @Get(':id')
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Get recipe by Id' })
+  @ApiOperation({
+    operationId: 'getRecipeDetails',
+    summary: 'Get recipe by Id',
+  })
   @ApiResponse({
     status: 200,
     description: 'Get recipe by Id',
@@ -80,7 +83,7 @@ export class RecipeController {
 
   @Patch(':id')
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Update recipe' })
+  @ApiOperation({ operationId: 'updateRecipe', summary: 'Update recipe' })
   @ApiResponse({ status: 204, description: 'Recipe updated.' })
   updateRecipe(
     @Param('id') id: string,
@@ -92,7 +95,7 @@ export class RecipeController {
 
   @Delete(':id')
   @ApiParam({ name: 'id' })
-  @ApiOperation({ summary: 'Remove recipe' })
+  @ApiOperation({ operationId: 'removeRecipe', summary: 'Remove recipe' })
   @ApiResponse({ status: 204, description: 'Recipe removed.' })
   removeRecipe(@Param('id') id: string) {
     this.logger.log('remove recipe');
