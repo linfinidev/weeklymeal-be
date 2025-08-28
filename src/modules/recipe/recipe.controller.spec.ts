@@ -6,11 +6,11 @@ import { Recipe } from './entities/recipe.entity';
 import { successResponse } from '@/common/utils';
 import { API_SUCCESS_MSG } from '@/common/constants/messages';
 import {
-  mockRecipesRes,
   mockRecipeId,
   mockCreateRecipeReq,
   mockUpdateRecipeReq,
   mockRecipeRes,
+  mockPaginatedRecipesRes,
 } from './recipe.mock';
 import { Ingredient } from '../ingredient/entities/ingredient.entity';
 
@@ -53,10 +53,14 @@ describe('RecipeController', () => {
     jest
       .spyOn(recipeService, 'getAll')
       .mockImplementation(() =>
-        Promise.resolve(successResponse(API_SUCCESS_MSG, mockRecipesRes)),
+        Promise.resolve(
+          successResponse(API_SUCCESS_MSG, mockPaginatedRecipesRes),
+        ),
       );
     const response = await recipeController.getRecipes('');
-    expect(response).toEqual(successResponse(API_SUCCESS_MSG, mockRecipesRes));
+    expect(response).toEqual(
+      successResponse(API_SUCCESS_MSG, mockPaginatedRecipesRes),
+    );
   });
 
   it('getDetails', async () => {

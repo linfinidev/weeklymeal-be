@@ -10,8 +10,8 @@ import {
   endDate,
   mockCreateMealReq,
   mockMealId,
+  mockMealListRes,
   mockMealRes,
-  mockMealsRes,
   mockUpdateMealReq,
   startDate,
 } from './meal.mock';
@@ -55,10 +55,10 @@ describe('MealController', () => {
     jest
       .spyOn(mealService, 'getAll')
       .mockImplementation(() =>
-        Promise.resolve(successResponse(API_SUCCESS_MSG, mockMealsRes)),
+        Promise.resolve(successResponse(API_SUCCESS_MSG, mockMealListRes)),
       );
     const response = await mealController.getMeals(startDate, endDate);
-    expect(response).toEqual(successResponse(API_SUCCESS_MSG, mockMealsRes));
+    expect(response).toEqual(successResponse(API_SUCCESS_MSG, mockMealListRes));
   });
 
   it('getDetails', async () => {

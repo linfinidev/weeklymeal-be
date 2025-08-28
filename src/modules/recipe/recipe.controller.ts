@@ -13,6 +13,7 @@ import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import {
+  ApiExtraModels,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -21,9 +22,12 @@ import {
 } from '@nestjs/swagger';
 import { GenericApiResponse } from '@/common/dtos';
 import { RecipeResponseDto } from './dto/response-recipe.dto';
+import { RecipeListResponseDto } from './dto/response-recipe-list.dto';
+import { PaginatedDto } from '@/common/dtos/api-paginated.dto';
 
 @ApiTags('recipes')
 @Controller('recipe')
+@ApiExtraModels(PaginatedDto)
 export class RecipeController {
   private readonly logger = new Logger(RecipeService.name);
   constructor(private readonly recipeService: RecipeService) {}
@@ -44,17 +48,19 @@ export class RecipeController {
 
   @Get()
   @ApiQuery({ name: 'name', required: false })
-  @ApiOperation({ summary: 'Get recipes' })
+  @ApiQuery({ name: 'page', required: false })
+  @ApiOperation({ operationId: 'getRecipes', summary: 'Get recipes' })
   @ApiResponse({
     status: 200,
     description: 'Get recipes',
-    type: [RecipeResponseDto],
+    type: RecipeListResponseDto,
   })
   getRecipes(
     @Query('name') name?: string,
-  ): Promise<GenericApiResponse<Array<RecipeResponseDto>>> {
+    @Query('page') page?: string,
+  ): Promise<GenericApiResponse<RecipeListResponseDto>> {
     this.logger.log('find by recipe name');
-    return this.recipeService.getAll(name);
+    return this.recipeService.getAll(name, page);
   }
 
   @Get(':id')
