@@ -6,12 +6,9 @@ import { In, Like, Repository } from 'typeorm';
 import { errorResponse, successResponse } from '@/common/utils';
 import { API_SUCCESS_MSG, API_FAIL_MSG } from '@/common/constants/messages';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
-import {
-  mapToRecipeDto,
-  mapToRecipeDtos,
-  mapToRecipeEntity,
-} from '@/mappers/recipeMapper';
+import { mapToRecipeDto, mapToRecipeEntity } from '@/mappers/recipeMapper';
 import { Ingredient } from '../ingredient/entities/ingredient.entity';
+import { RecipeListResponseDto } from './dto/response-recipe-list.dto';
 
 @Injectable()
 export class RecipeService {
@@ -37,13 +34,25 @@ export class RecipeService {
     }
   }
 
-  async getAll(recipeName?: string) {
+  async getAll(recipeName?: string, page?: string) {
     try {
-      const recipes = await this.recipeRepository.find({
+      const limit = 30;
+      const pageNum = page ? parseInt(page) : 1;
+      const [recipes, total] = await this.recipeRepository.findAndCount({
         where: { name: Like(`${recipeName || ''}%`) },
         relations: ['ingredients'],
+        skip: (pageNum - 1) * limit,
+        take: limit,
+        order: { createdAt: 'DESC' }, // optional
       });
-      const res = mapToRecipeDtos(recipes);
+
+      const res: RecipeListResponseDto = {
+        items: recipes.map((item) => ({ id: item.id, name: item.name })),
+        total,
+        pageNum,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      };
       return successResponse(API_SUCCESS_MSG, res);
     } catch {
       return errorResponse(API_FAIL_MSG);

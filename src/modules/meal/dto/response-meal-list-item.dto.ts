@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { MealItemResponseDto } from './response-meal-item.dto copy';
+import { MealItemResponseDto } from './response-meal-item.dto';
 
 export class MealListItemResponseDto {
   @ApiProperty({ example: '2025-08-01' })

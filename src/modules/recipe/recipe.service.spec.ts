@@ -22,6 +22,7 @@ describe('RecipeService', () => {
         {
           provide: getRepositoryToken(Recipe),
           useValue: {
+            findAndCount: jest.fn(),
             findOneBy: jest.fn(),
             save: jest.fn(),
             delete: jest.fn(),
@@ -46,12 +47,15 @@ describe('RecipeService', () => {
   });
 
   it('should find recipes by name', async () => {
-    recipeRepository.find.mockResolvedValue(mockRecipes);
+    recipeRepository.findAndCount.mockResolvedValue(mockRecipes);
 
     await recipeService.getAll('egg');
-    expect(recipeRepository.find).toHaveBeenCalledWith({
+    expect(recipeRepository.findAndCount).toHaveBeenCalledWith({
       where: { name: Like('egg%') },
       relations: ['ingredients'],
+      skip: 0,
+      take: 30,
+      order: { createdAt: 'DESC' },
     });
   });
 

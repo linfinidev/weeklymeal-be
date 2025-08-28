@@ -1,7 +1,7 @@
 import { DATE_YYYYMMDD_SLASH_FORMAT } from '@/common/constants';
 import { convertDatetoString } from '@/common/utils';
 import { CreateMealDto } from '@/modules/meal/dto/create-meal.dto';
-import { MealItemResponseDto } from '@/modules/meal/dto/response-meal-item.dto copy';
+import { MealItemResponseDto } from '@/modules/meal/dto/response-meal-item.dto';
 import { MealListItemResponseDto } from '@/modules/meal/dto/response-meal-list-item.dto';
 import { MealResponseDto } from '@/modules/meal/dto/response-meal.dto';
 import { Meal } from '@/modules/meal/entities/meal.entity';
@@ -31,7 +31,7 @@ export const mapToMealDto = (entity: Meal): MealResponseDto => {
 export const mapToMealItemDto = (entity: Meal): MealItemResponseDto => {
   const dto = new MealItemResponseDto();
   dto.id = entity.id;
-  dto.recipe_ids = entity.recipes.map((i) => i.id);
+  dto.recipe_names = entity.recipes.map((i) => i.id);
   return dto;
 };
 

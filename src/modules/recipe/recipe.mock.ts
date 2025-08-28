@@ -1,7 +1,23 @@
+import { PaginatedDto } from '@/common/dtos/api-paginated.dto';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
+import { RecipeListItemResponseDto } from './dto/response-recipe-list-item.dto';
 import { RecipeResponseDto } from './dto/response-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { Recipe } from './entities/recipe.entity';
+
+export const mockPaginatedRecipesRes: PaginatedDto<RecipeListItemResponseDto> =
+  {
+    limit: 30,
+    pageNum: 1,
+    total: 1,
+    totalPages: 1,
+    items: [
+      {
+        id: '1',
+        name: 'tomato soup',
+      },
+    ],
+  };
 
 export const mockRecipesRes: RecipeResponseDto[] = [
   {
@@ -14,6 +30,13 @@ export const mockRecipesRes: RecipeResponseDto[] = [
 ];
 
 export const mockRecipeRes: RecipeResponseDto = mockRecipesRes[0];
+
+export const mockRecipeListRes: RecipeListItemResponseDto[] = [
+  {
+    id: '1',
+    name: 'tomato soup',
+  },
+];
 
 export const mockCreateRecipeReq: CreateRecipeDto = {
   name: 'tomato soup',

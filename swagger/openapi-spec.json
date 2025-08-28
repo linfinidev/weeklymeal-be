@@ -189,6 +189,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -197,10 +205,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RecipeResponseDto"
-                  }
+                  "$ref": "#/components/schemas/RecipeListResponseDto"
                 }
               }
             }
@@ -524,6 +529,36 @@
           "name"
         ]
       },
+      "PaginatedDto": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "pageNum": {
+            "type": "number"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "total",
+          "limit",
+          "totalPages",
+          "pageNum",
+          "items"
+        ]
+      },
       "CreateRecipeDto": {
         "type": "object",
         "properties": {
@@ -595,6 +630,53 @@
           "content",
           "img_url",
           "ingredientIds"
+        ]
+      },
+      "RecipeListItemResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "name": {
+            "type": "string",
+            "example": "Egg soup"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "RecipeListResponseDto": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "pageNum": {
+            "type": "number"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecipeListItemResponseDto"
+            }
+          }
+        },
+        "required": [
+          "total",
+          "limit",
+          "totalPages",
+          "pageNum",
+          "items"
         ]
       },
       "UpdateRecipeDto": {
@@ -701,10 +783,10 @@
             "type": "string",
             "example": "1"
           },
-          "recipe_ids": {
+          "recipe_names": {
             "example": [
-              "1",
-              "2"
+              "bun",
+              "com"
             ],
             "type": "array",
             "items": {
@@ -714,7 +796,7 @@
         },
         "required": [
           "id",
-          "recipe_ids"
+          "recipe_names"
         ]
       },
       "MealListItemResponseDto": {

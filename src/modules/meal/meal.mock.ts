@@ -1,4 +1,5 @@
 import { CreateMealDto } from './dto/create-meal.dto';
+import { MealListItemResponseDto } from './dto/response-meal-list-item.dto';
 import { MealResponseDto } from './dto/response-meal.dto';
 import { UpdateMealDto } from './dto/update-meal.dto';
 import { Meal } from './entities/meal.entity';
@@ -9,10 +10,21 @@ export const endDate = '2025/08/31';
 
 export const mockMealId = '1';
 
+export const mockMealListRes: MealListItemResponseDto[] = [
+  {
+    date: '2025/08/01',
+    dinner: {
+      id: '1',
+      recipe_names: ['bun', 'com'],
+    },
+    lunch: null,
+  },
+];
+
 export const mockMealsRes: MealResponseDto[] = [
   {
     id: '1',
-    date: '2025-08-01',
+    date: '2025/08/01',
     type: 'lunch',
     recipe_ids: ['1', '2'],
   },
