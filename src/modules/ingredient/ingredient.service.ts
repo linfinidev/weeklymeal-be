@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateIngredientDto } from './dto/create-ingredient.dto';
-import { UpdateIngredientDto } from './dto/update-ingredient.dto';
+import { CreateIngredientDto } from './dtos/create-ingredient.dto';
+import { UpdateIngredientDto } from './dtos/update-ingredient.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ingredient } from './entities/ingredient.entity';
 import { Like, Repository } from 'typeorm';
@@ -10,7 +10,7 @@ import {
 } from '@/common/utils';
 import { API_FAIL_MSG, API_SUCCESS_MSG } from '@/common/constants/messages';
 import { plainToInstance } from 'class-transformer';
-import { IngredientResponseDto } from './dto/response-ingredient.dto';
+import { IngredientResponseDto } from './dtos/response-ingredient.dto';
 
 @Injectable()
 export class IngredientService {

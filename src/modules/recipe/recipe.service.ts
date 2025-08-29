@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRecipeDto } from './dto/create-recipe.dto';
+import { CreateRecipeDto } from './dtos/create-recipe.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { In, Like, Repository } from 'typeorm';
 import { errorResponse, successResponse } from '@/common/utils';
 import { API_SUCCESS_MSG, API_FAIL_MSG } from '@/common/constants/messages';
-import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { UpdateRecipeDto } from './dtos/update-recipe.dto';
 import { mapToRecipeDto, mapToRecipeEntity } from '@/mappers/recipeMapper';
 import { Ingredient } from '../ingredient/entities/ingredient.entity';
-import { RecipeListResponseDto } from './dto/response-recipe-list.dto';
+import { RecipeListResponseDto } from './dtos/response-recipe-list.dto';
 
 @Injectable()
 export class RecipeService {

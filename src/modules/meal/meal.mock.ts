@@ -1,7 +1,7 @@
-import { CreateMealDto } from './dto/create-meal.dto';
-import { MealListItemResponseDto } from './dto/response-meal-list-item.dto';
-import { MealResponseDto } from './dto/response-meal.dto';
-import { UpdateMealDto } from './dto/update-meal.dto';
+import { CreateMealDto } from './dtos/create-meal.dto';
+import { MealListItemResponseDto } from './dtos/response-meal-list-item.dto';
+import { MealResponseDto } from './dtos/response-meal.dto';
+import { UpdateMealDto } from './dtos/update-meal.dto';
 import { Meal } from './entities/meal.entity';
 
 export const startDate = '2025/08/01';

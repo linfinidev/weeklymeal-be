@@ -1,6 +1,6 @@
 import { Ingredient } from '@/modules/ingredient/entities/ingredient.entity';
-import { CreateRecipeDto } from '@/modules/recipe/dto/create-recipe.dto';
-import { RecipeResponseDto } from '@/modules/recipe/dto/response-recipe.dto';
+import { CreateRecipeDto } from '@/modules/recipe/dtos/create-recipe.dto';
+import { RecipeResponseDto } from '@/modules/recipe/dtos/response-recipe.dto';
 import { Recipe } from '@/modules/recipe/entities/recipe.entity';
 
 export const mapToRecipeEntity = (

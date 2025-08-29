@@ -1,6 +1,6 @@
-import { CreateIngredientDto } from './dto/create-ingredient.dto';
-import { UpdateIngredientDto } from './dto/update-ingredient.dto';
-import { IngredientResponseDto } from './dto/response-ingredient.dto';
+import { CreateIngredientDto } from './dtos/create-ingredient.dto';
+import { UpdateIngredientDto } from './dtos/update-ingredient.dto';
+import { IngredientResponseDto } from './dtos/response-ingredient.dto';
 import { Ingredient } from './entities/ingredient.entity';
 
 export const mockIngredientsRes: IngredientResponseDto[] = [

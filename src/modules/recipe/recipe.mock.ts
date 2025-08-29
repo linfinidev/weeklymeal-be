@@ -1,8 +1,8 @@
 import { PaginatedDto } from '@/common/dtos/api-paginated.dto';
-import { CreateRecipeDto } from './dto/create-recipe.dto';
-import { RecipeListItemResponseDto } from './dto/response-recipe-list-item.dto';
-import { RecipeResponseDto } from './dto/response-recipe.dto';
-import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { CreateRecipeDto } from './dtos/create-recipe.dto';
+import { RecipeListItemResponseDto } from './dtos/response-recipe-list-item.dto';
+import { RecipeResponseDto } from './dtos/response-recipe.dto';
+import { UpdateRecipeDto } from './dtos/update-recipe.dto';
 import { Recipe } from './entities/recipe.entity';
 
 export const mockPaginatedRecipesRes: PaginatedDto<RecipeListItemResponseDto> =

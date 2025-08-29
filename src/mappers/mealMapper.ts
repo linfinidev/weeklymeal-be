@@ -1,9 +1,9 @@
 import { DATE_YYYYMMDD_SLASH_FORMAT } from '@/common/constants';
 import { convertDatetoString } from '@/common/utils';
-import { CreateMealDto } from '@/modules/meal/dto/create-meal.dto';
-import { MealItemResponseDto } from '@/modules/meal/dto/response-meal-item.dto';
-import { MealListItemResponseDto } from '@/modules/meal/dto/response-meal-list-item.dto';
-import { MealResponseDto } from '@/modules/meal/dto/response-meal.dto';
+import { CreateMealDto } from '@/modules/meal/dtos/create-meal.dto';
+import { MealItemResponseDto } from '@/modules/meal/dtos/response-meal-item.dto';
+import { MealListItemResponseDto } from '@/modules/meal/dtos/response-meal-list-item.dto';
+import { MealResponseDto } from '@/modules/meal/dtos/response-meal.dto';
 import { Meal } from '@/modules/meal/entities/meal.entity';
 import { Recipe } from '@/modules/recipe/entities/recipe.entity';
 import { DateTime } from 'luxon';

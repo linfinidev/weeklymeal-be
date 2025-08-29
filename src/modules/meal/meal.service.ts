@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMealDto } from './dto/create-meal.dto';
-import { UpdateMealDto } from './dto/update-meal.dto';
+import { CreateMealDto } from './dtos/create-meal.dto';
+import { UpdateMealDto } from './dtos/update-meal.dto';
 import { Between, In, Repository } from 'typeorm';
 import { Meal } from './entities/meal.entity';
 import { InjectRepository } from '@nestjs/typeorm';

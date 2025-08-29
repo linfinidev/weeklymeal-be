@@ -10,8 +10,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { IngredientService } from './ingredient.service';
-import { CreateIngredientDto } from './dto/create-ingredient.dto';
-import { UpdateIngredientDto } from './dto/update-ingredient.dto';
+import { CreateIngredientDto } from './dtos/create-ingredient.dto';
+import { UpdateIngredientDto } from './dtos/update-ingredient.dto';
 import {
   ApiOperation,
   ApiParam,
@@ -20,7 +20,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { GenericApiResponse } from '@/common/dtos';
-import { IngredientResponseDto } from './dto/response-ingredient.dto';
+import { IngredientResponseDto } from './dtos/response-ingredient.dto';
 
 @ApiTags('Default')
 @Controller('ingredient')
