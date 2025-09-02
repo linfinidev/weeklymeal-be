@@ -3,9 +3,11 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { writeFileSync } from 'fs';
 import { ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.enableCors({
     origin: ['http://localhost:3000'],
     methods: 'GET,PUT,PATCH,POST,DELETE',
@@ -21,6 +23,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // to be able to read cookies
+  app.use(cookieParser());
 
   // Swagger config
   const config = new DocumentBuilder()

@@ -10,8 +10,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
-import { CreateRecipeDto } from './dto/create-recipe.dto';
-import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { CreateRecipeDto } from './dtos/create-recipe.dto';
+import { UpdateRecipeDto } from './dtos/update-recipe.dto';
 import {
   ApiExtraModels,
   ApiOperation,
@@ -21,8 +21,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { GenericApiResponse } from '@/common/dtos';
-import { RecipeResponseDto } from './dto/response-recipe.dto';
-import { RecipeListResponseDto } from './dto/response-recipe-list.dto';
+import { RecipeResponseDto } from './dtos/response-recipe.dto';
+import { RecipeListResponseDto } from './dtos/response-recipe-list.dto';
 import { PaginatedDto } from '@/common/dtos/api-paginated.dto';
 
 @ApiTags('Default')

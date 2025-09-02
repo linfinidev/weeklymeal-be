@@ -1,25 +1,24 @@
-import { User } from '@/modules/user/entities/user.entity';
 import {
+  Entity,
+  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class Ingredient {
+export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ nullable: false })
   name: string;
 
-  @ManyToOne(() => User)
-  @JoinColumn()
-  user: User;
+  @Column({ nullable: false })
+  email: string;
+
+  @Column({ nullable: true })
+  password: string;
 
   @CreateDateColumn()
   createdAt: Date;

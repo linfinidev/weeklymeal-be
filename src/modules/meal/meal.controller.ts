@@ -10,8 +10,8 @@ import {
   Logger,
 } from '@nestjs/common';
 import { MealService } from './meal.service';
-import { CreateMealDto } from './dto/create-meal.dto';
-import { UpdateMealDto } from './dto/update-meal.dto';
+import { CreateMealDto } from './dtos/create-meal.dto';
+import { UpdateMealDto } from './dtos/update-meal.dto';
 import {
   ApiOperation,
   ApiParam,
@@ -19,9 +19,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { MealResponseDto } from './dto/response-meal.dto';
+import { MealResponseDto } from './dtos/response-meal.dto';
 import { GenericApiResponse } from '@/common/dtos';
-import { MealListItemResponseDto } from './dto/response-meal-list-item.dto';
+import { MealListItemResponseDto } from './dtos/response-meal-list-item.dto';
 
 @ApiTags('Default')
 @Controller('meal')

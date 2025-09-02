@@ -8,10 +8,11 @@ import {
   Delete,
   Logger,
   Query,
+  Request,
 } from '@nestjs/common';
 import { IngredientService } from './ingredient.service';
-import { CreateIngredientDto } from './dto/create-ingredient.dto';
-import { UpdateIngredientDto } from './dto/update-ingredient.dto';
+import { CreateIngredientDto } from './dtos/create-ingredient.dto';
+import { UpdateIngredientDto } from './dtos/update-ingredient.dto';
 import {
   ApiOperation,
   ApiParam,
@@ -20,7 +21,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { GenericApiResponse } from '@/common/dtos';
-import { IngredientResponseDto } from './dto/response-ingredient.dto';
+import { IngredientResponseDto } from './dtos/response-ingredient.dto';
+import { UserResponseDto } from '../user/dtos/response-user.dto';
 
 @ApiTags('Default')
 @Controller('ingredient')
@@ -40,9 +42,10 @@ export class IngredientController {
   })
   createIngredient(
     @Body() createIngredientDto: CreateIngredientDto,
+    @Request() req: UserResponseDto,
   ): Promise<GenericApiResponse<IngredientResponseDto>> {
     this.logger.log('create ingredient');
-    return this.ingredientService.create(createIngredientDto);
+    return this.ingredientService.create(createIngredientDto, req.id);
   }
 
   @Get()
@@ -57,10 +60,11 @@ export class IngredientController {
     type: [IngredientResponseDto],
   })
   getIngredients(
+    @Request() req: UserResponseDto,
     @Query('name') name?: string,
   ): Promise<GenericApiResponse<Array<IngredientResponseDto>>> {
     this.logger.log('find by ingredient name');
-    return this.ingredientService.getAll(name);
+    return this.ingredientService.getAll(name, req.id);
   }
 
   @Put(':id')
