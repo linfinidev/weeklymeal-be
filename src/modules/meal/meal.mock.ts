@@ -1,3 +1,4 @@
+import { mockUser } from '../user/user.mock';
 import { CreateMealDto } from './dtos/create-meal.dto';
 import { MealListItemResponseDto } from './dtos/response-meal-list-item.dto';
 import { MealResponseDto } from './dtos/response-meal.dto';
@@ -61,14 +62,17 @@ export const mockMeals: Meal[] = [
             name: 'tomato',
             createdAt: new Date(),
             updatedAt: new Date(),
+            user: mockUser,
           },
         ],
         createdAt: new Date(),
         updatedAt: new Date(),
+        user: mockUser,
       },
     ],
     createdAt: new Date(),
     updatedAt: new Date(),
+    user: mockUser,
   },
 ];
 

@@ -4,6 +4,7 @@ import { RecipeListItemResponseDto } from './dtos/response-recipe-list-item.dto'
 import { RecipeResponseDto } from './dtos/response-recipe.dto';
 import { UpdateRecipeDto } from './dtos/update-recipe.dto';
 import { Recipe } from './entities/recipe.entity';
+import { mockUser } from '../user/user.mock';
 
 export const mockPaginatedRecipesRes: PaginatedDto<RecipeListItemResponseDto> =
   {
@@ -64,10 +65,12 @@ export const mockRecipes: Recipe[] = [
         name: 'tomato',
         createdAt: new Date(),
         updatedAt: new Date(),
+        user: mockUser,
       },
     ],
     createdAt: new Date(),
     updatedAt: new Date(),
+    user: mockUser,
   },
 ];
 

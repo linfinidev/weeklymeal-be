@@ -1,4 +1,5 @@
 import { Recipe } from '@/modules/recipe/entities/recipe.entity';
+import { User } from '@/modules/user/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,6 +8,8 @@ import {
   UpdateDateColumn,
   ManyToMany,
   JoinTable,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -29,6 +32,10 @@ export class Meal {
   @ManyToMany(() => Recipe)
   @JoinTable()
   recipes: Recipe[];
+
+  @ManyToOne(() => User)
+  @JoinColumn()
+  user: User;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -4,13 +4,11 @@ import { UpdateIngredientDto } from './dtos/update-ingredient.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ingredient } from './entities/ingredient.entity';
 import { Like, Repository } from 'typeorm';
-import {
-  errorResponse,
-  successResponse,
-} from '@/common/utils';
+import { errorResponse, successResponse } from '@/common/utils';
 import { API_FAIL_MSG, API_SUCCESS_MSG } from '@/common/constants/messages';
 import { plainToInstance } from 'class-transformer';
 import { IngredientResponseDto } from './dtos/response-ingredient.dto';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class IngredientService {
@@ -19,9 +17,12 @@ export class IngredientService {
     private readonly ingredientRepository: Repository<Ingredient>,
   ) {}
 
-  async create(createIngredientDto: CreateIngredientDto) {
+  async create(createIngredientDto: CreateIngredientDto, userId: string) {
     try {
-      const ingredient = this.ingredientRepository.create(createIngredientDto);
+      const ingredient = this.ingredientRepository.create({
+        ...createIngredientDto,
+        user: { id: userId } as User,
+      });
       await this.ingredientRepository.save(ingredient);
       const res = plainToInstance(IngredientResponseDto, ingredient, {
         excludeExtraneousValues: true,
@@ -32,10 +33,10 @@ export class IngredientService {
     }
   }
 
-  async getAll(ingredientName?: string) {
+  async getAll(userId: string, ingredientName?: string) {
     try {
       const ingredients = await this.ingredientRepository.find({
-        where: { name: Like(`${ingredientName || ''}%`) },
+        where: { name: Like(`${ingredientName || ''}%`), user: { id: userId } },
       });
       const res = plainToInstance(IngredientResponseDto, ingredients, {
         excludeExtraneousValues: true,

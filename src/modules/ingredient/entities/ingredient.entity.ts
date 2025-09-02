@@ -1,7 +1,10 @@
+import { User } from '@/modules/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -13,6 +16,10 @@ export class Ingredient {
 
   @Column({ nullable: false })
   name: string;
+
+  @ManyToOne(() => User)
+  @JoinColumn()
+  user: User;
 
   @CreateDateColumn()
   createdAt: Date;

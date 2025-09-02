@@ -9,10 +9,10 @@ export class CreateUserDto {
   name: string;
 
   @ApiProperty({ required: true, example: 'john_doe@example.com' })
-  @IsDefined({ message: 'id is required' })
+  @IsDefined({ message: 'email is required' })
   @IsString()
   @IsNotEmpty()
-  id: string;
+  email: string;
 
   @ApiProperty({ required: true, example: '****' })
   @IsDefined({ message: 'password is required' })
