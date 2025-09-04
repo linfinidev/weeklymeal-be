@@ -13,6 +13,7 @@ import {
   mockPaginatedRecipesRes,
 } from './recipe.mock';
 import { Ingredient } from '../ingredient/entities/ingredient.entity';
+import { mockUserResponse } from '../user/user.mock';
 
 describe('RecipeController', () => {
   let recipeController: RecipeController;
@@ -57,7 +58,7 @@ describe('RecipeController', () => {
           successResponse(API_SUCCESS_MSG, mockPaginatedRecipesRes),
         ),
       );
-    const response = await recipeController.getRecipes('');
+    const response = await recipeController.getRecipes(mockUserResponse, '');
     expect(response).toEqual(
       successResponse(API_SUCCESS_MSG, mockPaginatedRecipesRes),
     );
@@ -69,7 +70,10 @@ describe('RecipeController', () => {
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG, mockRecipeRes)),
       );
-    const response = await recipeController.getRecipeDetails(mockRecipeId);
+    const response = await recipeController.getRecipeDetails(
+      mockUserResponse,
+      mockRecipeId,
+    );
     expect(response).toEqual(successResponse(API_SUCCESS_MSG, mockRecipeRes));
   });
 
@@ -79,7 +83,10 @@ describe('RecipeController', () => {
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
-    const response = await recipeController.createRecipe(mockCreateRecipeReq);
+    const response = await recipeController.createRecipe(
+      mockUserResponse,
+      mockCreateRecipeReq,
+    );
     expect(response.success).toBeTruthy();
   });
 
@@ -90,6 +97,7 @@ describe('RecipeController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await recipeController.updateRecipe(
+      mockUserResponse,
       mockRecipeId,
       mockUpdateRecipeReq,
     );
@@ -102,7 +110,10 @@ describe('RecipeController', () => {
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
-    const response = await recipeController.removeRecipe(mockRecipeId);
+    const response = await recipeController.removeRecipe(
+      mockUserResponse,
+      mockRecipeId,
+    );
     expect(response.success).toBeTruthy();
   });
 });

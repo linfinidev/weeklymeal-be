@@ -522,6 +522,38 @@
           "Default"
         ]
       }
+    },
+    "/user": {
+      "post": {
+        "operationId": "createAccount",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Account created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create account",
+        "tags": [
+          "Default"
+        ]
+      }
     }
   },
   "info": {
@@ -941,6 +973,28 @@
           "id",
           "name",
           "email"
+        ]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john_doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "****"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
         ]
       }
     }

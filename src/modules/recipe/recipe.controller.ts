@@ -8,6 +8,7 @@ import {
   Delete,
   Logger,
   Query,
+  Request,
 } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dtos/create-recipe.dto';
@@ -24,6 +25,7 @@ import { GenericApiResponse } from '@/common/dtos';
 import { RecipeResponseDto } from './dtos/response-recipe.dto';
 import { RecipeListResponseDto } from './dtos/response-recipe-list.dto';
 import { PaginatedDto } from '@/common/dtos/api-paginated.dto';
+import { UserResponseDto } from '../user/dtos/response-user.dto';
 
 @ApiTags('Default')
 @Controller('recipe')
@@ -40,10 +42,11 @@ export class RecipeController {
     type: RecipeResponseDto,
   })
   createRecipe(
+    @Request() req: UserResponseDto,
     @Body() createRecipeDto: CreateRecipeDto,
   ): Promise<GenericApiResponse<RecipeResponseDto>> {
     this.logger.log('create recipes');
-    return this.recipeService.create(createRecipeDto);
+    return this.recipeService.create(req.id, createRecipeDto);
   }
 
   @Get()
@@ -56,11 +59,12 @@ export class RecipeController {
     type: RecipeListResponseDto,
   })
   getRecipes(
+    @Request() req: UserResponseDto,
     @Query('name') name?: string,
     @Query('page') page?: string,
   ): Promise<GenericApiResponse<RecipeListResponseDto>> {
     this.logger.log('find by recipe name');
-    return this.recipeService.getAll(name, page);
+    return this.recipeService.getAll(req.id, name, page);
   }
 
   @Get(':id')
@@ -75,10 +79,11 @@ export class RecipeController {
     type: RecipeResponseDto,
   })
   getRecipeDetails(
+    @Request() req: UserResponseDto,
     @Param(':id') id: string,
   ): Promise<GenericApiResponse<RecipeResponseDto>> {
     this.logger.log('find by recipe id');
-    return this.recipeService.getDetails(id);
+    return this.recipeService.getDetails(req.id, id);
   }
 
   @Patch(':id')
@@ -86,19 +91,20 @@ export class RecipeController {
   @ApiOperation({ operationId: 'updateRecipe', summary: 'Update recipe' })
   @ApiResponse({ status: 204, description: 'Recipe updated.' })
   updateRecipe(
+    @Request() req: UserResponseDto,
     @Param('id') id: string,
     @Body() updateRecipeDto: UpdateRecipeDto,
   ) {
     this.logger.log('update recipe');
-    return this.recipeService.update(id, updateRecipeDto);
+    return this.recipeService.update(req.id, id, updateRecipeDto);
   }
 
   @Delete(':id')
   @ApiParam({ name: 'id' })
   @ApiOperation({ operationId: 'removeRecipe', summary: 'Remove recipe' })
   @ApiResponse({ status: 204, description: 'Recipe removed.' })
-  removeRecipe(@Param('id') id: string) {
+  removeRecipe(@Request() req: UserResponseDto, @Param('id') id: string) {
     this.logger.log('remove recipe');
-    return this.recipeService.remove(id);
+    return this.recipeService.remove(req.id, id);
   }
 }

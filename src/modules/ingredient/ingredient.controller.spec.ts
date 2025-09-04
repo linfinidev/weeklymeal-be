@@ -11,6 +11,7 @@ import {
   mockUpdateIngredientReq,
 } from './ingredient.mock';
 import { mockIngredientId } from './ingredient.mock';
+import { mockUserResponse } from '../user/user.mock';
 
 describe('IngredientController', () => {
   let ingredientController: IngredientController;
@@ -48,7 +49,8 @@ describe('IngredientController', () => {
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG, mockIngredientsRes)),
       );
-    const response = await ingredientController.getIngredients('');
+    const response =
+      await ingredientController.getIngredients(mockUserResponse);
     expect(response).toEqual(
       successResponse(API_SUCCESS_MSG, mockIngredientsRes),
     );
@@ -61,6 +63,7 @@ describe('IngredientController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await ingredientController.createIngredient(
+      mockUserResponse,
       mockCreateIngredientReq,
     );
     expect(response.success).toBeTruthy();
@@ -73,6 +76,7 @@ describe('IngredientController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await ingredientController.updateIngredient(
+      mockUserResponse,
       mockIngredientId,
       mockUpdateIngredientReq,
     );
@@ -85,8 +89,10 @@ describe('IngredientController', () => {
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
-    const response =
-      await ingredientController.removeIngredient(mockIngredientId);
+    const response = await ingredientController.removeIngredient(
+      mockUserResponse,
+      mockIngredientId,
+    );
     expect(response.success).toBeTruthy();
   });
 });

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateIngredientDto } from './dtos/create-ingredient.dto';
 import { UpdateIngredientDto } from './dtos/update-ingredient.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -47,11 +47,18 @@ export class IngredientService {
     }
   }
 
-  async update(id: string, updateIngredientDto: UpdateIngredientDto) {
+  async update(
+    id: string,
+    updateIngredientDto: UpdateIngredientDto,
+    userId: string,
+  ) {
     try {
-      const ingredient = await this.ingredientRepository.findOneBy({
-        id: id,
+      const ingredient = await this.ingredientRepository.findOne({
+        where: { id: id, user: { id: userId } },
       });
+      if (!ingredient) {
+        throw new NotFoundException('Ingredient not found');
+      }
       Object.assign(ingredient, updateIngredientDto);
       await this.ingredientRepository.save(ingredient);
       return successResponse(API_SUCCESS_MSG);
@@ -60,9 +67,15 @@ export class IngredientService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string, userId: string) {
     try {
-      await this.ingredientRepository.delete(id);
+      const result = await this.ingredientRepository.delete({
+        id,
+        user: { id: userId },
+      });
+      if (result.affected === 0) {
+        throw new NotFoundException('Ingredient not found');
+      }
       return successResponse(API_SUCCESS_MSG);
     } catch {
       return errorResponse(API_FAIL_MSG);

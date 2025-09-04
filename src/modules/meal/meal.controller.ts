@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   Logger,
+  Request,
 } from '@nestjs/common';
 import { MealService } from './meal.service';
 import { CreateMealDto } from './dtos/create-meal.dto';
@@ -22,6 +23,7 @@ import {
 import { MealResponseDto } from './dtos/response-meal.dto';
 import { GenericApiResponse } from '@/common/dtos';
 import { MealListItemResponseDto } from './dtos/response-meal-list-item.dto';
+import { UserResponseDto } from '../user/dtos/response-user.dto';
 
 @ApiTags('Default')
 @Controller('meal')
@@ -37,10 +39,11 @@ export class MealController {
     type: MealResponseDto,
   })
   createMeal(
+    @Request() req: UserResponseDto,
     @Body() createMealDto: CreateMealDto,
   ): Promise<GenericApiResponse<MealResponseDto>> {
     this.logger.log('create meal');
-    return this.mealService.create(createMealDto);
+    return this.mealService.create(req.id, createMealDto);
   }
 
   @Get()
@@ -53,11 +56,12 @@ export class MealController {
     type: [MealListItemResponseDto],
   })
   getMeals(
+    @Request() req: UserResponseDto,
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
   ): Promise<GenericApiResponse<Array<MealListItemResponseDto>>> {
     this.logger.log('find meals between start date and end date');
-    return this.mealService.getAll(startDate, endDate);
+    return this.mealService.getAll(req.id, startDate, endDate);
   }
 
   @Get(':id')
@@ -69,27 +73,32 @@ export class MealController {
     type: MealResponseDto,
   })
   getMealDetails(
+    @Request() req: UserResponseDto,
     @Param('id') id: string,
   ): Promise<GenericApiResponse<MealResponseDto>> {
     this.logger.log('get meal details');
-    return this.mealService.getDetails(id);
+    return this.mealService.getDetails(req.id, id);
   }
 
   @Patch(':id')
   @ApiParam({ name: 'id' })
   @ApiOperation({ operationId: 'updateMeal', summary: 'Update meal' })
   @ApiResponse({ status: 204, description: 'Meal updated.' })
-  updateMeal(@Param('id') id: string, @Body() updateMealDto: UpdateMealDto) {
+  updateMeal(
+    @Request() req: UserResponseDto,
+    @Param('id') id: string,
+    @Body() updateMealDto: UpdateMealDto,
+  ) {
     this.logger.log('update meal details');
-    return this.mealService.update(id, updateMealDto);
+    return this.mealService.update(req.id, id, updateMealDto);
   }
 
   @Delete(':id')
   @ApiParam({ name: 'id' })
   @ApiOperation({ operationId: 'removeMeal', summary: 'Remove meal' })
   @ApiResponse({ status: 204, description: 'Meal removed.' })
-  removeMeal(@Param('id') id: string) {
+  removeMeal(@Request() req: UserResponseDto, @Param('id') id: string) {
     this.logger.log('delete meal');
-    return this.mealService.remove(id);
+    return this.mealService.remove(req.id, id);
   }
 }

@@ -15,6 +15,7 @@ import {
   mockUpdateMealReq,
   startDate,
 } from './meal.mock';
+import { mockUserResponse } from '../user/user.mock';
 
 describe('MealController', () => {
   let mealController: MealController;
@@ -57,7 +58,11 @@ describe('MealController', () => {
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG, mockMealListRes)),
       );
-    const response = await mealController.getMeals(startDate, endDate);
+    const response = await mealController.getMeals(
+      mockUserResponse,
+      startDate,
+      endDate,
+    );
     expect(response).toEqual(successResponse(API_SUCCESS_MSG, mockMealListRes));
   });
 
@@ -67,7 +72,10 @@ describe('MealController', () => {
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG, mockMealRes)),
       );
-    const response = await mealController.getMealDetails(mockMealId);
+    const response = await mealController.getMealDetails(
+      mockUserResponse,
+      mockMealId,
+    );
     expect(response).toEqual(successResponse(API_SUCCESS_MSG, mockMealRes));
   });
 
@@ -77,7 +85,10 @@ describe('MealController', () => {
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
-    const response = await mealController.createMeal(mockCreateMealReq);
+    const response = await mealController.createMeal(
+      mockUserResponse,
+      mockCreateMealReq,
+    );
     expect(response.success).toBeTruthy();
   });
 
@@ -88,6 +99,7 @@ describe('MealController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await mealController.updateMeal(
+      mockUserResponse,
       mockMealId,
       mockUpdateMealReq,
     );
@@ -100,7 +112,10 @@ describe('MealController', () => {
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
-    const response = await mealController.removeMeal(mockMealId);
+    const response = await mealController.removeMeal(
+      mockUserResponse,
+      mockMealId,
+    );
     expect(response.success).toBeTruthy();
   });
 });
