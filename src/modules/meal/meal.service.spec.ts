@@ -12,6 +12,7 @@ import {
   startDate,
 } from './meal.mock';
 import { Between } from 'typeorm';
+import { mockUserId } from '../user/user.mock';
 
 describe('MealService', () => {
   let mealService: MealService;
@@ -24,7 +25,7 @@ describe('MealService', () => {
         {
           provide: getRepositoryToken(Meal),
           useValue: {
-            findOneBy: jest.fn(),
+            findOne: jest.fn(),
             save: jest.fn(),
             delete: jest.fn(),
             find: jest.fn(),
@@ -50,36 +51,42 @@ describe('MealService', () => {
   it('should find meals by date range', async () => {
     mealRepository.find.mockResolvedValue(mockMeals);
 
-    await mealService.getAll(startDate, endDate);
+    await mealService.getAll(mockUserId, startDate, endDate);
     expect(mealRepository.find).toHaveBeenCalledWith({
-      where: { date: Between(new Date(startDate), new Date(endDate)) },
+      where: {
+        date: Between(new Date(startDate), new Date(endDate)),
+        user: { id: mockUserId },
+      },
       relations: ['recipes', 'recipes.ingredients'],
     });
   });
 
   it('should find meal by id', async () => {
-    mealRepository.findOneBy.mockResolvedValue(mockMeal);
+    mealRepository.findOne.mockResolvedValue(mockMeal);
 
-    await mealService.getDetails(mockMealId);
-    expect(mealRepository.findOneBy).toHaveBeenCalledWith({
-      id: mockMealId,
+    await mealService.getDetails(mockUserId, mockMealId);
+    expect(mealRepository.findOne).toHaveBeenCalledWith({
+      where: { id: mockMealId, user: { id: mockUserId } },
     });
   });
 
   it('should update meal by id', async () => {
-    mealRepository.findOneBy.mockResolvedValue(mockMeal);
+    mealRepository.findOne.mockResolvedValue(mockMeal);
 
-    await mealService.update(mockMealId, mockUpdateMealReq);
-    expect(mealRepository.findOneBy).toHaveBeenCalledWith({
-      id: mockMealId,
+    await mealService.update(mockUserId, mockMealId, mockUpdateMealReq);
+    expect(mealRepository.findOne).toHaveBeenCalledWith({
+      where: { id: mockMealId, user: { id: mockUserId } },
     });
   });
 
   it('should delete an meal by id', async () => {
     mealRepository.delete.mockResolvedValue({});
 
-    const result = await mealService.remove(mockMealId);
-    expect(mealRepository.delete).toHaveBeenCalledWith(mockMealId);
+    const result = await mealService.remove(mockUserId, mockMealId);
+    expect(mealRepository.delete).toHaveBeenCalledWith({
+      id: mockMealId,
+      user: { id: mockUserId },
+    });
     expect(result.success).toBe(true);
   });
 });

@@ -41,8 +41,8 @@ export class IngredientController {
     type: IngredientResponseDto,
   })
   createIngredient(
-    @Body() createIngredientDto: CreateIngredientDto,
     @Request() req: UserResponseDto,
+    @Body() createIngredientDto: CreateIngredientDto,
   ): Promise<GenericApiResponse<IngredientResponseDto>> {
     this.logger.log('create ingredient');
     return this.ingredientService.create(createIngredientDto, req.id);
@@ -75,11 +75,12 @@ export class IngredientController {
   })
   @ApiResponse({ status: 204, description: 'Ingredient updated.' })
   updateIngredient(
+    @Request() req: UserResponseDto,
     @Param('id') id: string,
     @Body() updateIngredientDto: UpdateIngredientDto,
   ) {
     this.logger.log('update ingredient');
-    return this.ingredientService.update(id, updateIngredientDto);
+    return this.ingredientService.update(id, updateIngredientDto, req.id);
   }
 
   @Delete(':id')
@@ -89,8 +90,8 @@ export class IngredientController {
     summary: 'Remove ingredient',
   })
   @ApiResponse({ status: 204, description: 'Ingredient removed.' })
-  removeIngredient(@Param('id') id: string) {
+  removeIngredient(@Request() req: UserResponseDto, @Param('id') id: string) {
     this.logger.log('remove ingredient');
-    return this.ingredientService.remove(id);
+    return this.ingredientService.remove(id, req.id);
   }
 }

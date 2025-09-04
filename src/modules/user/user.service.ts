@@ -25,12 +25,13 @@ export class UserService {
       const existingUser = await this.userRepository.findOne({
         where: { email: createUserDto.email },
       });
-      if (!existingUser) {
+      if (existingUser) {
         return errorResponse(EXISTING_EMAIL_MSG);
       }
       const salt = await bcrypt.genSalt();
       const hashPw = await bcrypt.hash(createUserDto.password, salt);
       const user = this.userRepository.create({
+        name: createUserDto.name,
         email: createUserDto.email,
         password: hashPw,
       });

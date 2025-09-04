@@ -8,6 +8,7 @@ import {
   mockIngredient,
   mockIngredientId,
 } from './ingredient.mock';
+import { mockUserId } from '../user/user.mock';
 
 describe('IngredientService', () => {
   let ingredientService: IngredientService;
@@ -20,7 +21,7 @@ describe('IngredientService', () => {
         {
           provide: getRepositoryToken(Ingredient),
           useValue: {
-            findOneBy: jest.fn(),
+            findOne: jest.fn(),
             save: jest.fn(),
             delete: jest.fn(),
             find: jest.fn(),
@@ -40,20 +41,24 @@ describe('IngredientService', () => {
   it('should find ingredients by name', async () => {
     ingredientRepository.find.mockResolvedValue(mockIngredients);
 
-    await ingredientService.getAll('Tom');
+    await ingredientService.getAll(mockUserId, 'Tom');
     expect(ingredientRepository.find).toHaveBeenCalledWith({
-      where: { name: Like('Tom%') },
+      where: { name: Like('Tom%'), user: { id: mockUserId } },
     });
   });
 
   it('should update ingredient by id', async () => {
-    ingredientRepository.findOneBy.mockResolvedValue(mockIngredient);
+    ingredientRepository.findOne.mockResolvedValue(mockIngredient);
 
-    await ingredientService.update(mockIngredientId, {
-      name: 'Cherry Tomato',
-    });
-    expect(ingredientRepository.findOneBy).toHaveBeenCalledWith({
-      id: mockIngredientId,
+    await ingredientService.update(
+      mockIngredientId,
+      {
+        name: 'Cherry Tomato',
+      },
+      mockUserId,
+    );
+    expect(ingredientRepository.findOne).toHaveBeenCalledWith({
+      where: { id: mockIngredientId, user: { id: mockUserId } },
     });
     expect(ingredientRepository.save).toHaveBeenCalledWith({
       ...mockIngredient,
@@ -64,8 +69,11 @@ describe('IngredientService', () => {
   it('should delete an ingredient by id', async () => {
     ingredientRepository.delete.mockResolvedValue({});
 
-    const result = await ingredientService.remove(mockIngredientId);
-    expect(ingredientRepository.delete).toHaveBeenCalledWith(mockIngredientId);
+    const result = await ingredientService.remove(mockIngredientId, mockUserId);
+    expect(ingredientRepository.delete).toHaveBeenCalledWith({
+      id: mockIngredientId,
+      user: { id: mockUserId },
+    });
     expect(result.success).toBe(true);
   });
 });
