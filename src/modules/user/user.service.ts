@@ -12,6 +12,7 @@ import { errorResponse, successResponse } from '@/common/utils';
 import * as bcrypt from 'bcrypt';
 import { mapToUserDto } from '@/mappers/userMapper';
 import { LoginUserDto } from './dtos/login-user.dto';
+import crypto from 'crypto';
 
 @Injectable()
 export class UserService {
@@ -60,6 +61,27 @@ export class UserService {
       return null;
     } catch {
       return null;
+    }
+  }
+
+  async isEmailExisting(email: string) {
+    try {
+      const currentUser = await this.userRepository.findOneBy({
+        email: email,
+      });
+      if (!currentUser) {
+        return false;
+      }
+      const rawToken = crypto.randomBytes(32).toString('hex');
+      const hashed = await bcrypt.hash(rawToken, 10);
+      const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+      await this.userRepository.update(currentUser.id, {
+        resetToken: hashed,
+        resetExpiresAt: expiresAt,
+      });
+      return true;
+    } catch {
+      return false;
     }
   }
 }

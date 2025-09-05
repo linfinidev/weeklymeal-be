@@ -5,6 +5,7 @@ import { UserResponseDto } from '../user/dtos/response-user.dto';
 import { LoginUserDto } from '../user/dtos/login-user.dto';
 import { Response } from 'express';
 import { Public } from '@/common/decorators/public.decorator';
+import { ForgotPasswordDto } from '../user/dtos/forgot-password.dto';
 
 @ApiTags('Default')
 @Controller('auth')
@@ -45,5 +46,17 @@ export class AuthController {
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('authToken');
     return { message: 'Logged out' };
+  }
+
+  @Public()
+  @Post('forgot-password')
+  @ApiOperation({ operationId: 'forgotPassword', summary: 'forgot password' })
+  @ApiResponse({
+    status: 201,
+    description: 'Forgot password',
+  })
+  async forgotPassword(@Body() forgotPwReq: ForgotPasswordDto) {
+    this.logger.log('login');
+    return this.authService.forgotPassword(forgotPwReq);
   }
 }
