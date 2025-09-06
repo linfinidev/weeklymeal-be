@@ -523,6 +523,56 @@
         ]
       }
     },
+    "/auth/forgot-password": {
+      "post": {
+        "operationId": "forgotPassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Forgot password"
+          }
+        },
+        "summary": "forgot password",
+        "tags": [
+          "Default"
+        ]
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "operationId": "resetPassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Reset password"
+          }
+        },
+        "summary": "reset password",
+        "tags": [
+          "Default"
+        ]
+      }
+    },
     "/user": {
       "post": {
         "operationId": "createAccount",
@@ -973,6 +1023,40 @@
           "id",
           "name",
           "email"
+        ]
+      },
+      "ForgotPasswordDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "john_doe@example.com"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "ResetPasswordDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "john_doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "****"
+          },
+          "token": {
+            "type": "string",
+            "example": "****"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "token"
         ]
       },
       "CreateUserDto": {

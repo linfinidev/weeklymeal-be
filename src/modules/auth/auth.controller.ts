@@ -6,6 +6,7 @@ import { LoginUserDto } from '../user/dtos/login-user.dto';
 import { Response } from 'express';
 import { Public } from '@/common/decorators/public.decorator';
 import { ForgotPasswordDto } from '../user/dtos/forgot-password.dto';
+import { ResetPasswordDto } from '../user/dtos/reset-password.dto';
 
 @ApiTags('Default')
 @Controller('auth')
@@ -56,7 +57,19 @@ export class AuthController {
     description: 'Forgot password',
   })
   async forgotPassword(@Body() forgotPwReq: ForgotPasswordDto) {
-    this.logger.log('login');
+    this.logger.log('forgot password');
     return this.authService.forgotPassword(forgotPwReq);
+  }
+
+  @Public()
+  @Post('reset-password')
+  @ApiOperation({ operationId: 'resetPassword', summary: 'reset password' })
+  @ApiResponse({
+    status: 201,
+    description: 'Reset password',
+  })
+  async resetPassword(@Body() resetPwReq: ResetPasswordDto) {
+    this.logger.log('reset password');
+    return this.authService.resetPassword(resetPwReq);
   }
 }
