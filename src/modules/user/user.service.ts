@@ -12,6 +12,9 @@ import { errorResponse, successResponse } from '@/common/utils';
 import * as bcrypt from 'bcrypt';
 import { mapToUserDto } from '@/mappers/userMapper';
 import { LoginUserDto } from './dtos/login-user.dto';
+import * as crypto from 'crypto';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class UserService {
@@ -58,6 +61,51 @@ export class UserService {
         return currentUser;
       }
       return null;
+    } catch {
+      return null;
+    }
+  }
+
+  async getResetPWUser(email: string) {
+    try {
+      const currentUser = await this.userRepository.findOneBy({
+        email: email,
+      });
+      if (!currentUser) {
+        return null;
+      }
+      const rawToken = crypto.randomBytes(32).toString('hex');
+      const hashed = await bcrypt.hash(rawToken, 10);
+      const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+      currentUser.resetToken = hashed;
+      currentUser.resetExpiresAt = expiresAt;
+      return await this.userRepository.save(currentUser);
+    } catch {
+      return null;
+    }
+  }
+
+  async resetPassword(resetPwReq: ResetPasswordDto) {
+    try {
+      const currentUser = await this.userRepository.findOneBy({
+        email: resetPwReq.email,
+      });
+      if (!currentUser) {
+        return null;
+      }
+      const isTokenMatched = currentUser.resetToken === resetPwReq.token;
+      const isTokenExpired =
+        DateTime.fromJSDate(currentUser.resetExpiresAt).toMillis() <
+        DateTime.now().toMillis();
+      if (!isTokenMatched || isTokenExpired) {
+        return null;
+      }
+      const salt = await bcrypt.genSalt();
+      const hashPw = await bcrypt.hash(resetPwReq.password, salt);
+      currentUser.password = hashPw;
+      currentUser.resetToken = null;
+      currentUser.resetExpiresAt = null;
+      return await this.userRepository.save(currentUser);
     } catch {
       return null;
     }

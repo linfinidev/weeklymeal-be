@@ -1,11 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { errorResponse, successResponse } from '@/common/utils';
-import { API_FAIL_MSG, API_SUCCESS_MSG } from '@/common/constants/messages';
+import {
+  API_FAIL_MSG,
+  API_SUCCESS_MSG,
+  NO_EMAIL_MSG,
+  RESET_FAILED_MSG,
+  RESET_PW_EMAIL_MSG,
+} from '@/common/constants/messages';
 import { LoginUserDto } from '../user/dtos/login-user.dto';
 import { mapToUserDto } from '@/mappers/userMapper';
 import { JwtService } from '@nestjs/jwt';
 import { UserResponseDto } from '../user/dtos/response-user.dto';
+import { ForgotPasswordDto } from '../user/dtos/forgot-password.dto';
+import { sendResetLinkEmail } from '@/common/utils/email.util';
+import { ResetPasswordDto } from '../user/dtos/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -29,5 +38,32 @@ export class AuthService {
   generateToken(user: UserResponseDto) {
     const payload = { sub: user.id, email: user.email, name: user.name };
     return this.jwtService.sign(payload);
+  }
+
+  async forgotPassword(forgotPwReq: ForgotPasswordDto) {
+    try {
+      const currentuser = await this.userService.getResetPWUser(
+        forgotPwReq.email,
+      );
+      if (!currentuser) {
+        return errorResponse(NO_EMAIL_MSG);
+      }
+      await sendResetLinkEmail(currentuser.email, currentuser.resetToken);
+      return successResponse(RESET_PW_EMAIL_MSG);
+    } catch {
+      return errorResponse(API_FAIL_MSG);
+    }
+  }
+
+  async resetPassword(resetPwReq: ResetPasswordDto) {
+    try {
+      const currentuser = await this.userService.resetPassword(resetPwReq);
+      if (!currentuser) {
+        return errorResponse(RESET_FAILED_MSG);
+      }
+      return successResponse(API_SUCCESS_MSG);
+    } catch {
+      return errorResponse(API_FAIL_MSG);
+    }
   }
 }

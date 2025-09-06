@@ -6,6 +6,8 @@ export const mockUser: User = {
   email: 'john_doe@example.com',
   password: 'hashpw',
   name: 'John Doe',
+  resetToken: null,
+  resetExpiresAt: null,
   createdAt: new Date(),
   updatedAt: new Date(),
 };

@@ -24,6 +24,19 @@ export class User {
   })
   password: string;
 
+  @Column({
+    nullable: true,
+    type: 'varchar',
+    length: 255,
+  })
+  resetToken: string;
+
+  @Column({
+    nullable: true,
+    type: Date,
+  })
+  resetExpiresAt: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 
