@@ -6,7 +6,6 @@ import { config } from 'dotenv';
 config();
 
 const configService = new ConfigService();
-console.log('CA cert:', process.env.DB_SSL_CA?.slice(0, 30));
 
 export default new DataSource({
   type: 'postgres',
@@ -19,7 +18,7 @@ export default new DataSource({
     process.env.NODE_ENV === 'production'
       ? {
           rejectUnauthorized: true,
-          ca: process.env.DB_SSL_CA,
+          ca: Buffer.from(process.env.DB_SSL_CA, 'base64').toString('ascii'),
         }
       : undefined,
   entities: ['src/modules/**/*.entity.ts'],
