@@ -18,15 +18,16 @@ export class Meal {
   id: string;
 
   @Column({
+    nullable: false,
     type: 'date',
     transformer: {
-      to: (value: Date) => value, // store as is
-      from: (value: string) => new Date(value), // parse string to Date
+      to: (value: Date) => value,
+      from: (value: string) => new Date(value),
     },
   })
   date: Date;
 
-  @Column()
+  @Column({ nullable: false })
   type: string;
 
   @ManyToMany(() => Recipe)
