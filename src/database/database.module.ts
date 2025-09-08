@@ -12,15 +12,10 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      ssl:
-        process.env.NODE_ENV === 'production'
-          ? {
-              rejectUnauthorized: true,
-              ca: Buffer.from(process.env.DB_SSL_CA, 'base64').toString(
-                'ascii',
-              ),
-            }
-          : undefined,
+      ssl: true,
+      extra: {
+        rejectUnauthorized: false,
+      },
       autoLoadEntities: true,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: process.env.NODE_ENV === 'production' ? false : true,

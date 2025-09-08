@@ -14,13 +14,10 @@ export default new DataSource({
   username: configService.get('DB_USERNAME'),
   password: configService.get('DB_PASSWORD'),
   database: configService.get('DB_NAME'),
-  ssl:
-    process.env.NODE_ENV === 'production'
-      ? {
-          rejectUnauthorized: true,
-          ca: Buffer.from(process.env.DB_SSL_CA, 'base64').toString('ascii'),
-        }
-      : undefined,
+  ssl: true,
+  extra: {
+    rejectUnauthorized: false,
+  },
   entities: ['src/modules/**/*.entity.ts'],
   migrations: ['src/migrations/*.ts'],
   synchronize: process.env.NODE_ENV === 'production' ? false : true,
