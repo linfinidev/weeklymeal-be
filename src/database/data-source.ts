@@ -2,9 +2,6 @@ import 'dotenv/config';
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
-import { readFileSync } from 'fs';
-
-const caCert = readFileSync('src/database/ca.pem').toString();
 
 config();
 
@@ -21,7 +18,7 @@ export default new DataSource({
     process.env.NODE_ENV === 'production'
       ? {
           rejectUnauthorized: true,
-          ca: caCert,
+          ca: process.env.DB_SSL_CA,
         }
       : undefined,
   entities: ['src/modules/**/*.entity.ts'],
