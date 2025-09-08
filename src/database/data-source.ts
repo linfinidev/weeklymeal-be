@@ -14,9 +14,7 @@ export default new DataSource({
   url: configService.get('DATABASE_URL'),
   ssl:
     configService.get('NODE_ENV') === 'production'
-      ? {
-          ca: caCert,
-        }
+      ? { rejectUnauthorized: true, ca: caCert }
       : false,
   entities: ['src/modules/**/*.entity.ts'],
   migrations: ['src/migrations/*.ts'],
