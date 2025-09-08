@@ -6,6 +6,7 @@ import { config } from 'dotenv';
 config();
 
 const configService = new ConfigService();
+console.log('CA cert:', process.env.DB_SSL_CA?.slice(0, 30));
 
 export default new DataSource({
   type: 'postgres',
