@@ -6,20 +6,20 @@ import { config } from 'dotenv';
 config();
 
 const configService = new ConfigService();
+const envCA: string = configService.get('DB_SSL_CA');
+const caCert = Buffer.from(envCA, 'base64').toString('ascii');
 
 export default new DataSource({
   type: 'postgres',
-  host: configService.get('DB_HOST'),
-  port: configService.get('DB_PORT'),
-  username: configService.get('DB_USERNAME'),
-  password: configService.get('DB_PASSWORD'),
-  database: configService.get('DB_NAME'),
-  ssl: true,
-  extra: {
-    rejectUnauthorized: false,
-  },
+  url: configService.get('DATABASE_URL'),
+  ssl:
+    configService.get('NODE_ENV') === 'production'
+      ? {
+          ca: caCert,
+        }
+      : false,
   entities: ['src/modules/**/*.entity.ts'],
   migrations: ['src/migrations/*.ts'],
-  synchronize: process.env.NODE_ENV === 'production' ? false : true,
+  synchronize: configService.get('NODE_ENV') === 'production' ? false : true,
   migrationsRun: true,
 });
