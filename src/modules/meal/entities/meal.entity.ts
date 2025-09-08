@@ -12,7 +12,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'meals' })
 export class Meal {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -31,11 +31,21 @@ export class Meal {
   type: string;
 
   @ManyToMany(() => Recipe)
-  @JoinTable()
+  @JoinTable({
+    name: 'meal_recipes',
+    joinColumn: {
+      name: 'meal_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'recipe_id',
+      referencedColumnName: 'id',
+    },
+  })
   recipes: Recipe[];
 
   @ManyToOne(() => User)
-  @JoinColumn()
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @CreateDateColumn()

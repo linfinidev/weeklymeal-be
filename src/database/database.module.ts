@@ -1,9 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { readFileSync } from 'fs';
-
-const caCert = readFileSync('src/database/ca.pem').toString();
 
 @Module({
   imports: [
@@ -19,7 +16,7 @@ const caCert = readFileSync('src/database/ca.pem').toString();
         process.env.NODE_ENV === 'production'
           ? {
               rejectUnauthorized: true,
-              ca: caCert,
+              ca: process.env.DB_SSL_CA,
             }
           : undefined,
       autoLoadEntities: true,
