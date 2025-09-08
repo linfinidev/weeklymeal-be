@@ -16,7 +16,9 @@ import { ConfigModule } from '@nestjs/config';
         process.env.NODE_ENV === 'production'
           ? {
               rejectUnauthorized: true,
-              ca: process.env.DB_SSL_CA,
+              ca: Buffer.from(process.env.DB_SSL_CA, 'base64').toString(
+                'ascii',
+              ),
             }
           : undefined,
       autoLoadEntities: true,
