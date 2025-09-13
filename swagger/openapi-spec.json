@@ -509,6 +509,21 @@
         ]
       }
     },
+    "/auth/guest-login": {
+      "post": {
+        "operationId": "guestLogin",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Login as guest"
+          }
+        },
+        "summary": "login as guest",
+        "tags": [
+          "Default"
+        ]
+      }
+    },
     "/auth/logout": {
       "post": {
         "operationId": "AuthController_logout",
