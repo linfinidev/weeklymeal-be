@@ -7,6 +7,7 @@ import {
   NO_EMAIL_MSG,
   RESET_FAILED_MSG,
   RESET_PW_EMAIL_MSG,
+  TEST_EMAIL_MSG,
 } from '@/common/constants/messages';
 import { LoginUserDto } from '../user/dtos/login-user.dto';
 import { mapToUserDto } from '@/mappers/userMapper';
@@ -35,6 +36,21 @@ export class AuthService {
     }
   }
 
+  async guestLogin() {
+    try {
+      const user = await this.userService.findUser({
+        email: process.env.DEFAULT_USER_EMAIL,
+        password: process.env.DEFAULT_USER_PW,
+      });
+      if (!user) {
+        return errorResponse(API_FAIL_MSG);
+      }
+      return successResponse(API_SUCCESS_MSG, mapToUserDto(user));
+    } catch {
+      return errorResponse(API_FAIL_MSG);
+    }
+  }
+
   generateToken(user: UserResponseDto) {
     const payload = { sub: user.id, email: user.email, name: user.name };
     return this.jwtService.sign(payload);
@@ -47,6 +63,9 @@ export class AuthService {
       );
       if (!currentuser) {
         return errorResponse(NO_EMAIL_MSG);
+      }
+      if (currentuser.email === process.env.DEFAULT_USER_EMAIL) {
+        return errorResponse(TEST_EMAIL_MSG);
       }
       await sendResetLinkEmail(currentuser.email, currentuser.resetToken);
       return successResponse(RESET_PW_EMAIL_MSG);
