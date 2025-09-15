@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,7 +8,7 @@ import {
   API_SUCCESS_MSG,
   EXISTING_EMAIL_MSG,
 } from '@/common/constants/messages';
-import { errorResponse, successResponse } from '@/common/utils';
+import { successResponse, throwErrorResponse } from '@/common/utils';
 import * as bcrypt from 'bcrypt';
 import { mapToUserDto } from '@/mappers/userMapper';
 import { LoginUserDto } from './dtos/login-user.dto';
@@ -24,25 +24,24 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    try {
-      const existingUser = await this.userRepository.findOne({
-        where: { email: createUserDto.email },
-      });
-      if (existingUser) {
-        return errorResponse(EXISTING_EMAIL_MSG);
-      }
-      const salt = await bcrypt.genSalt();
-      const hashPw = await bcrypt.hash(createUserDto.password, salt);
-      const user = this.userRepository.create({
-        name: createUserDto.name,
-        email: createUserDto.email,
-        password: hashPw,
-      });
-      const res = await this.userRepository.save(user);
-      return successResponse(API_SUCCESS_MSG, mapToUserDto(res));
-    } catch {
-      return errorResponse(API_FAIL_MSG);
+    const existingUser = await this.userRepository.findOne({
+      where: { email: createUserDto.email },
+    });
+    if (existingUser) {
+      throwErrorResponse(EXISTING_EMAIL_MSG, HttpStatus.BAD_REQUEST);
     }
+    const salt = await bcrypt.genSalt();
+    const hashPw = await bcrypt.hash(createUserDto.password, salt);
+    const user = this.userRepository.create({
+      name: createUserDto.name,
+      email: createUserDto.email,
+      password: hashPw,
+    });
+    const res = await this.userRepository.save(user);
+    if (res) {
+      return successResponse(API_SUCCESS_MSG, mapToUserDto(res));
+    }
+    throwErrorResponse(API_FAIL_MSG);
   }
 
   async findUser(loginUserDto: LoginUserDto) {

@@ -70,6 +70,11 @@ export class AuthController {
 
   @Public()
   @Post('logout')
+  @ApiOperation({ operationId: 'logout', summary: 'logout' })
+  @ApiResponse({
+    status: 201,
+    description: 'log out',
+  })
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('authToken');
     return { message: 'Logged out' };
