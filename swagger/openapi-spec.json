@@ -3,7 +3,7 @@
   "paths": {
     "/healthcheck": {
       "get": {
-        "operationId": "AppController_getHealthcheck",
+        "operationId": "healthcheck",
         "parameters": [],
         "responses": {
           "200": {
@@ -17,6 +17,7 @@
             }
           }
         },
+        "summary": "Check if summary is running ok",
         "tags": [
           "App"
         ]
@@ -526,13 +527,14 @@
     },
     "/auth/logout": {
       "post": {
-        "operationId": "AuthController_logout",
+        "operationId": "logout",
         "parameters": [],
         "responses": {
           "201": {
-            "description": ""
+            "description": "log out"
           }
         },
+        "summary": "logout",
         "tags": [
           "Default"
         ]

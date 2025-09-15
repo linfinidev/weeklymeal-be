@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import { errorResponse, successResponse } from '@/common/utils';
+import { throwErrorResponse, successResponse } from '@/common/utils';
 import {
   API_FAIL_MSG,
   API_SUCCESS_MSG,
@@ -25,30 +25,22 @@ export class AuthService {
   ) {}
 
   async login(loginUserDto: LoginUserDto) {
-    try {
-      const user = await this.userService.findUser(loginUserDto);
-      if (!user) {
-        return errorResponse(API_FAIL_MSG);
-      }
-      return successResponse(API_SUCCESS_MSG, mapToUserDto(user));
-    } catch {
-      return errorResponse(API_FAIL_MSG);
+    const user = await this.userService.findUser(loginUserDto);
+    if (!user) {
+      throwErrorResponse(API_FAIL_MSG);
     }
+    return successResponse(API_SUCCESS_MSG, mapToUserDto(user));
   }
 
   async guestLogin() {
-    try {
-      const user = await this.userService.findUser({
-        email: process.env.DEFAULT_USER_EMAIL,
-        password: process.env.DEFAULT_USER_PW,
-      });
-      if (!user) {
-        return errorResponse(API_FAIL_MSG);
-      }
-      return successResponse(API_SUCCESS_MSG, mapToUserDto(user));
-    } catch {
-      return errorResponse(API_FAIL_MSG);
+    const user = await this.userService.findUser({
+      email: process.env.DEFAULT_USER_EMAIL,
+      password: process.env.DEFAULT_USER_PW,
+    });
+    if (!user) {
+      throwErrorResponse(API_FAIL_MSG);
     }
+    return successResponse(API_SUCCESS_MSG, mapToUserDto(user));
   }
 
   generateToken(user: UserResponseDto) {
@@ -57,32 +49,24 @@ export class AuthService {
   }
 
   async forgotPassword(forgotPwReq: ForgotPasswordDto) {
-    try {
-      const currentuser = await this.userService.getResetPWUser(
-        forgotPwReq.email,
-      );
-      if (!currentuser) {
-        return errorResponse(NO_EMAIL_MSG);
-      }
-      if (currentuser.email === process.env.DEFAULT_USER_EMAIL) {
-        return errorResponse(TEST_EMAIL_MSG);
-      }
-      await sendResetLinkEmail(currentuser.email, currentuser.resetToken);
-      return successResponse(RESET_PW_EMAIL_MSG);
-    } catch {
-      return errorResponse(API_FAIL_MSG);
+    const currentuser = await this.userService.getResetPWUser(
+      forgotPwReq.email,
+    );
+    if (!currentuser) {
+      throwErrorResponse(NO_EMAIL_MSG);
     }
+    if (currentuser.email === process.env.DEFAULT_USER_EMAIL) {
+      throwErrorResponse(TEST_EMAIL_MSG);
+    }
+    await sendResetLinkEmail(currentuser.email, currentuser.resetToken);
+    return successResponse(RESET_PW_EMAIL_MSG);
   }
 
   async resetPassword(resetPwReq: ResetPasswordDto) {
-    try {
-      const currentuser = await this.userService.resetPassword(resetPwReq);
-      if (!currentuser) {
-        return errorResponse(RESET_FAILED_MSG);
-      }
-      return successResponse(API_SUCCESS_MSG);
-    } catch {
-      return errorResponse(API_FAIL_MSG);
+    const currentuser = await this.userService.resetPassword(resetPwReq);
+    if (!currentuser) {
+      throwErrorResponse(RESET_FAILED_MSG);
     }
+    return successResponse(API_SUCCESS_MSG);
   }
 }
