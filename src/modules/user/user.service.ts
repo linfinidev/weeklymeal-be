@@ -75,7 +75,7 @@ export class UserService {
       }
       const rawToken = crypto.randomBytes(32).toString('hex');
       const hashed = await bcrypt.hash(rawToken, 10);
-      const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+      const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
       currentUser.resetToken = hashed;
       currentUser.resetExpiresAt = expiresAt;
       return await this.userRepository.save(currentUser);
@@ -85,28 +85,28 @@ export class UserService {
   }
 
   async resetPassword(resetPwReq: ResetPasswordDto) {
-    try {
-      const currentUser = await this.userRepository.findOneBy({
-        email: resetPwReq.email,
-      });
-      if (!currentUser) {
-        return null;
-      }
-      const isTokenMatched = currentUser.resetToken === resetPwReq.token;
-      const isTokenExpired =
-        DateTime.fromJSDate(currentUser.resetExpiresAt).toMillis() <
-        DateTime.now().toMillis();
-      if (!isTokenMatched || isTokenExpired) {
-        return null;
-      }
-      const salt = await bcrypt.genSalt();
-      const hashPw = await bcrypt.hash(resetPwReq.password, salt);
-      currentUser.password = hashPw;
-      currentUser.resetToken = null;
-      currentUser.resetExpiresAt = null;
-      return await this.userRepository.save(currentUser);
-    } catch {
-      return null;
+    const currentUser = await this.userRepository.findOneBy({
+      email: resetPwReq.email,
+    });
+    if (!currentUser) {
+      throwErrorResponse('User not found', HttpStatus.NOT_FOUND);
     }
+    const isTokenMatched = currentUser.resetToken === resetPwReq.token;
+    const isTokenExpired =
+      DateTime.fromJSDate(currentUser.resetExpiresAt).toMillis() <
+      DateTime.now().toMillis();
+    if (!isTokenMatched || isTokenExpired) {
+      throwErrorResponse(
+        'Token is expired or not correct',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const salt = await bcrypt.genSalt();
+    const hashPw = await bcrypt.hash(resetPwReq.password, salt);
+    currentUser.password = hashPw;
+    currentUser.resetToken = null;
+    currentUser.resetExpiresAt = null;
+    await this.userRepository.save(currentUser);
+    return successResponse(API_SUCCESS_MSG);
   }
 }
