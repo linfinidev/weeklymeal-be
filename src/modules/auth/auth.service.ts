@@ -63,10 +63,6 @@ export class AuthService {
   }
 
   async resetPassword(resetPwReq: ResetPasswordDto) {
-    const currentuser = await this.userService.resetPassword(resetPwReq);
-    if (!currentuser) {
-      throwErrorResponse(RESET_FAILED_MSG);
-    }
-    return successResponse(API_SUCCESS_MSG);
+    await this.userService.resetPassword(resetPwReq);
   }
 }
