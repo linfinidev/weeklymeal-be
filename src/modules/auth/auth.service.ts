@@ -5,7 +5,6 @@ import {
   API_FAIL_MSG,
   API_SUCCESS_MSG,
   NO_EMAIL_MSG,
-  RESET_FAILED_MSG,
   RESET_PW_EMAIL_MSG,
   TEST_EMAIL_MSG,
 } from '@/common/constants/messages';
