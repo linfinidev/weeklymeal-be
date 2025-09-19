@@ -4,14 +4,7 @@ import { IsDefined, IsNotEmpty, IsString } from 'class-validator';
 
 export class ResetPasswordDto extends OmitType(CreateUserDto, [
   'name',
-  'password',
 ] as const) {
-  @ApiProperty({ required: true, example: '****' })
-  @IsDefined({ message: 'password is required' })
-  @IsString()
-  @IsNotEmpty()
-  password: string;
-
   @ApiProperty({ required: true, example: '****' })
   @IsDefined({ message: 'token is required' })
   @IsString()
