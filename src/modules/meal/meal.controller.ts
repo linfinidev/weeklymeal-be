@@ -24,6 +24,7 @@ import { MealResponseDto } from './dtos/response-meal.dto';
 import { GenericApiResponse } from '@/common/dtos';
 import { MealListItemResponseDto } from './dtos/response-meal-list-item.dto';
 import { UserResponseDto } from '../user/dtos/response-user.dto';
+import { AuthenticatedRequest } from '../auth/jwt.strategy';
 
 @ApiTags('Default')
 @Controller('meal')
@@ -39,11 +40,11 @@ export class MealController {
     type: MealResponseDto,
   })
   createMeal(
-    @Request() req: UserResponseDto,
+    @Request() req: AuthenticatedRequest,
     @Body() createMealDto: CreateMealDto,
   ): Promise<GenericApiResponse<MealResponseDto>> {
     this.logger.log('create meal');
-    return this.mealService.create(req.id, createMealDto);
+    return this.mealService.create(req.user.id, createMealDto);
   }
 
   @Get()
@@ -56,12 +57,12 @@ export class MealController {
     type: [MealListItemResponseDto],
   })
   getMeals(
-    @Request() req: UserResponseDto,
+    @Request() req: AuthenticatedRequest,
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
   ): Promise<GenericApiResponse<Array<MealListItemResponseDto>>> {
     this.logger.log('find meals between start date and end date');
-    return this.mealService.getAll(req.id, startDate, endDate);
+    return this.mealService.getAll(req.user.id, startDate, endDate);
   }
 
   @Get(':id')
@@ -73,11 +74,11 @@ export class MealController {
     type: MealResponseDto,
   })
   getMealDetails(
-    @Request() req: UserResponseDto,
+    @Request() req: AuthenticatedRequest,
     @Param('id') id: string,
   ): Promise<GenericApiResponse<MealResponseDto>> {
     this.logger.log('get meal details');
-    return this.mealService.getDetails(req.id, id);
+    return this.mealService.getDetails(req.user.id, id);
   }
 
   @Patch(':id')
@@ -85,20 +86,20 @@ export class MealController {
   @ApiOperation({ operationId: 'updateMeal', summary: 'Update meal' })
   @ApiResponse({ status: 204, description: 'Meal updated.' })
   updateMeal(
-    @Request() req: UserResponseDto,
+    @Request() req: AuthenticatedRequest,
     @Param('id') id: string,
     @Body() updateMealDto: UpdateMealDto,
   ) {
     this.logger.log('update meal details');
-    return this.mealService.update(req.id, id, updateMealDto);
+    return this.mealService.update(req.user.id, id, updateMealDto);
   }
 
   @Delete(':id')
   @ApiParam({ name: 'id' })
   @ApiOperation({ operationId: 'removeMeal', summary: 'Remove meal' })
   @ApiResponse({ status: 204, description: 'Meal removed.' })
-  removeMeal(@Request() req: UserResponseDto, @Param('id') id: string) {
+  removeMeal(@Request() req: AuthenticatedRequest, @Param('id') id: string) {
     this.logger.log('delete meal');
-    return this.mealService.remove(req.id, id);
+    return this.mealService.remove(req.user.id, id);
   }
 }

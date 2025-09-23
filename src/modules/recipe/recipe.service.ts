@@ -1,33 +1,42 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateRecipeDto } from './dtos/create-recipe.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recipe } from './entities/recipe.entity';
-import { In, Like, Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { throwErrorResponse, successResponse } from '@/common/utils';
-import { API_SUCCESS_MSG, API_FAIL_MSG } from '@/common/constants/messages';
+import { API_SUCCESS_MSG } from '@/common/constants/messages';
 import { UpdateRecipeDto } from './dtos/update-recipe.dto';
-import { mapToRecipeDto, mapToRecipeEntity } from '@/mappers/recipeMapper';
+import { mapToRecipeDto } from '@/mappers/recipeMapper';
 import { Ingredient } from '../ingredient/entities/ingredient.entity';
 import { RecipeListResponseDto } from './dtos/response-recipe-list.dto';
 import { User } from '../user/entities/user.entity';
+import { RecipeIngredient } from './entities/recipe-ingredient.entity';
 
 @Injectable()
 export class RecipeService {
   constructor(
     @InjectRepository(Recipe)
     private readonly recipeRepository: Repository<Recipe>,
-
-    @InjectRepository(Ingredient)
-    private readonly ingredientRepository: Repository<Ingredient>,
   ) {}
 
   async create(userId: string, createRecipeDto: CreateRecipeDto) {
-    const ingredients = await this.ingredientRepository.find({
-      where: { id: In(createRecipeDto.ingredientIds), user: { id: userId } },
-    });
-    const recipeEntity = mapToRecipeEntity(createRecipeDto, ingredients);
+    const newRecipe = new Recipe();
+    newRecipe.name = createRecipeDto.name;
+    newRecipe.intructions = createRecipeDto.instructions;
+    newRecipe.img_url = createRecipeDto.img_url;
+    newRecipe.user = { id: userId } as User;
+
+    // Map ingredients
+    newRecipe.recipeIngredients = createRecipeDto.recipeIngredients.map(
+      (riDto) => {
+        const ri = new RecipeIngredient();
+        ri.unit = riDto.unit;
+        ri.ingredient = { id: riDto.ingredientId } as Ingredient;
+        return ri;
+      },
+    );
     const recipe = this.recipeRepository.create({
-      ...recipeEntity,
+      ...newRecipe,
       user: { id: userId } as User,
     });
     const res = await this.recipeRepository.save(recipe);
@@ -42,7 +51,7 @@ export class RecipeService {
       relations: ['ingredients'],
       skip: (pageNum - 1) * limit,
       take: limit,
-      order: { createdAt: 'DESC' }, // optional
+      order: { createdAt: 'DESC' },
     });
     const res: RecipeListResponseDto = {
       items:

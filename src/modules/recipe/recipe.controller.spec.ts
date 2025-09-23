@@ -14,6 +14,7 @@ import {
 } from './recipe.mock';
 import { Ingredient } from '../ingredient/entities/ingredient.entity';
 import { mockUserResponse } from '../user/user.mock';
+import { AuthenticatedRequest } from '../auth/jwt.strategy';
 
 describe('RecipeController', () => {
   let recipeController: RecipeController;
@@ -58,7 +59,10 @@ describe('RecipeController', () => {
           successResponse(API_SUCCESS_MSG, mockPaginatedRecipesRes),
         ),
       );
-    const response = await recipeController.getRecipes(mockUserResponse, '');
+    const response = await recipeController.getRecipes(
+      { user: mockUserResponse } as AuthenticatedRequest,
+      '',
+    );
     expect(response).toEqual(
       successResponse(API_SUCCESS_MSG, mockPaginatedRecipesRes),
     );
@@ -71,7 +75,7 @@ describe('RecipeController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG, mockRecipeRes)),
       );
     const response = await recipeController.getRecipeDetails(
-      mockUserResponse,
+      { user: mockUserResponse } as AuthenticatedRequest,
       mockRecipeId,
     );
     expect(response).toEqual(successResponse(API_SUCCESS_MSG, mockRecipeRes));
@@ -84,7 +88,7 @@ describe('RecipeController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await recipeController.createRecipe(
-      mockUserResponse,
+      { user: mockUserResponse } as AuthenticatedRequest,
       mockCreateRecipeReq,
     );
     expect(response.success).toBeTruthy();
@@ -97,7 +101,7 @@ describe('RecipeController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await recipeController.updateRecipe(
-      mockUserResponse,
+      { user: mockUserResponse } as AuthenticatedRequest,
       mockRecipeId,
       mockUpdateRecipeReq,
     );
@@ -111,7 +115,7 @@ describe('RecipeController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await recipeController.removeRecipe(
-      mockUserResponse,
+      { user: mockUserResponse } as AuthenticatedRequest,
       mockRecipeId,
     );
     expect(response.success).toBeTruthy();

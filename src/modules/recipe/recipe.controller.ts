@@ -25,7 +25,7 @@ import { GenericApiResponse } from '@/common/dtos';
 import { RecipeResponseDto } from './dtos/response-recipe.dto';
 import { RecipeListResponseDto } from './dtos/response-recipe-list.dto';
 import { PaginatedDto } from '@/common/dtos/api-paginated.dto';
-import { UserResponseDto } from '../user/dtos/response-user.dto';
+import { AuthenticatedRequest } from '../auth/jwt.strategy';
 
 @ApiTags('Default')
 @Controller('recipe')
@@ -42,11 +42,11 @@ export class RecipeController {
     type: RecipeResponseDto,
   })
   createRecipe(
-    @Request() req: UserResponseDto,
+    @Request() req: AuthenticatedRequest,
     @Body() createRecipeDto: CreateRecipeDto,
   ): Promise<GenericApiResponse<RecipeResponseDto>> {
     this.logger.log('create recipes');
-    return this.recipeService.create(req.id, createRecipeDto);
+    return this.recipeService.create(req.user.id, createRecipeDto);
   }
 
   @Get()
@@ -59,12 +59,12 @@ export class RecipeController {
     type: RecipeListResponseDto,
   })
   getRecipes(
-    @Request() req: UserResponseDto,
+    @Request() req: AuthenticatedRequest,
     @Query('name') name?: string,
     @Query('page') page?: string,
   ): Promise<GenericApiResponse<RecipeListResponseDto>> {
     this.logger.log('find by recipe name');
-    return this.recipeService.getAll(req.id, name, page);
+    return this.recipeService.getAll(req.user.id, name, page);
   }
 
   @Get(':id')
@@ -79,11 +79,11 @@ export class RecipeController {
     type: RecipeResponseDto,
   })
   getRecipeDetails(
-    @Request() req: UserResponseDto,
+    @Request() req: AuthenticatedRequest,
     @Param(':id') id: string,
   ): Promise<GenericApiResponse<RecipeResponseDto>> {
     this.logger.log('find by recipe id');
-    return this.recipeService.getDetails(req.id, id);
+    return this.recipeService.getDetails(req.user.id, id);
   }
 
   @Patch(':id')
@@ -91,20 +91,20 @@ export class RecipeController {
   @ApiOperation({ operationId: 'updateRecipe', summary: 'Update recipe' })
   @ApiResponse({ status: 204, description: 'Recipe updated.' })
   updateRecipe(
-    @Request() req: UserResponseDto,
+    @Request() req: AuthenticatedRequest,
     @Param('id') id: string,
     @Body() updateRecipeDto: UpdateRecipeDto,
   ) {
     this.logger.log('update recipe');
-    return this.recipeService.update(req.id, id, updateRecipeDto);
+    return this.recipeService.update(req.user.id, id, updateRecipeDto);
   }
 
   @Delete(':id')
   @ApiParam({ name: 'id' })
   @ApiOperation({ operationId: 'removeRecipe', summary: 'Remove recipe' })
   @ApiResponse({ status: 204, description: 'Recipe removed.' })
-  removeRecipe(@Request() req: UserResponseDto, @Param('id') id: string) {
+  removeRecipe(@Request() req: AuthenticatedRequest, @Param('id') id: string) {
     this.logger.log('remove recipe');
-    return this.recipeService.remove(req.id, id);
+    return this.recipeService.remove(req.user.id, id);
   }
 }

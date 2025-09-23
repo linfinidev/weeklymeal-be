@@ -24,7 +24,7 @@ export const mockRecipesRes: RecipeResponseDto[] = [
   {
     id: '1',
     name: 'tomato soup',
-    content: '- Dice tomato\n- Crack 2 eggs',
+    intructions: '- Dice tomato\n- Crack 2 eggs',
     img_url: 'imgSrc',
     ingredientIds: ['1', '2'],
   },
@@ -41,31 +41,38 @@ export const mockRecipeListRes: RecipeListItemResponseDto[] = [
 
 export const mockCreateRecipeReq: CreateRecipeDto = {
   name: 'tomato soup',
-  content: '- Dice tomato\n- Crack 2 eggs',
+  instructions: '- Dice tomato\n- Crack 2 eggs',
   img_url: 'imgSrc',
-  ingredientIds: ['1'],
+  recipeIngredients: [{ ingredientId: '1', unit: null }],
 };
 
 export const mockUpdateRecipeReq: UpdateRecipeDto = {
   name: 'tomato soup',
-  content: '- Dice 2 tomato\n- Crack 2 eggs',
+  instructions: '- Dice 2 tomato\n- Crack 2 eggs',
   img_url: 'imgSrc',
-  ingredientIds: ['1'],
+  recipeIngredients: [{ ingredientId: '1', unit: null }],
 };
 
 export const mockRecipes: Recipe[] = [
   {
     id: '1',
     name: 'tomato soup',
-    content: '- Dice tomato\n- Crack 2 eggs',
+    intructions: '- Dice tomato\n- Crack 2 eggs',
     img_url: 'imgSrc',
-    ingredients: [
+    recipeIngredients: [
       {
         id: '1',
-        name: 'tomato',
+        ingredient: {
+          id: '1',
+          name: 'tomato',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          user: mockUser,
+        },
+        unit: '1 cup',
+        recipe: null,
         createdAt: new Date(),
         updatedAt: new Date(),
-        user: mockUser,
       },
     ],
     createdAt: new Date(),

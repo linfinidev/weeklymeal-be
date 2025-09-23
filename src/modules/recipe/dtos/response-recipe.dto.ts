@@ -13,7 +13,7 @@ export class RecipeResponseDto {
 
   @ApiProperty({ example: '- Dice tomato\n- Crack 2 eggs' })
   @Expose()
-  content: string;
+  intructions: string;
 
   @ApiProperty({ example: '/imgSrc' })
   @Expose()
