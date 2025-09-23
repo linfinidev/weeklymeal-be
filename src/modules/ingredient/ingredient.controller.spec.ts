@@ -12,6 +12,7 @@ import {
 } from './ingredient.mock';
 import { mockIngredientId } from './ingredient.mock';
 import { mockUserResponse } from '../user/user.mock';
+import { AuthenticatedRequest } from '../auth/jwt.strategy';
 
 describe('IngredientController', () => {
   let ingredientController: IngredientController;
@@ -49,8 +50,9 @@ describe('IngredientController', () => {
       .mockImplementation(() =>
         Promise.resolve(successResponse(API_SUCCESS_MSG, mockIngredientsRes)),
       );
-    const response =
-      await ingredientController.getIngredients(mockUserResponse);
+    const response = await ingredientController.getIngredients({
+      user: mockUserResponse,
+    } as AuthenticatedRequest);
     expect(response).toEqual(
       successResponse(API_SUCCESS_MSG, mockIngredientsRes),
     );
@@ -63,7 +65,7 @@ describe('IngredientController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await ingredientController.createIngredient(
-      mockUserResponse,
+      { user: mockUserResponse } as AuthenticatedRequest,
       mockCreateIngredientReq,
     );
     expect(response.success).toBeTruthy();
@@ -76,7 +78,7 @@ describe('IngredientController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await ingredientController.updateIngredient(
-      mockUserResponse,
+      { user: mockUserResponse } as AuthenticatedRequest,
       mockIngredientId,
       mockUpdateIngredientReq,
     );
@@ -90,7 +92,7 @@ describe('IngredientController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await ingredientController.removeIngredient(
-      mockUserResponse,
+      { user: mockUserResponse } as AuthenticatedRequest,
       mockIngredientId,
     );
     expect(response.success).toBeTruthy();

@@ -7,6 +7,7 @@ import {
   IsDefined,
   IsOptional,
 } from 'class-validator';
+import { CreateRecipeIngredientDto } from './create-recipe-ingredient.dto';
 
 export class CreateRecipeDto {
   @ApiProperty({ required: true, example: 'Egg soup' })
@@ -18,7 +19,7 @@ export class CreateRecipeDto {
   @ApiProperty({ required: true, example: 'Crack 2 eggs,...' })
   @IsString()
   @IsNotEmpty()
-  content: string;
+  instructions: string;
 
   @ApiProperty({ required: true, nullable: true, example: 'imgSrc' })
   @IsString()
@@ -33,5 +34,5 @@ export class CreateRecipeDto {
   @IsArray()
   @IsUUID('all', { each: true })
   @IsNotEmpty()
-  ingredientIds: string[];
+  recipeIngredients: CreateRecipeIngredientDto[];
 }

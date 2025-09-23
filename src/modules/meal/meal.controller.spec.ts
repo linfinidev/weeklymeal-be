@@ -16,6 +16,7 @@ import {
   startDate,
 } from './meal.mock';
 import { mockUserResponse } from '../user/user.mock';
+import { AuthenticatedRequest } from '../auth/jwt.strategy';
 
 describe('MealController', () => {
   let mealController: MealController;
@@ -59,7 +60,7 @@ describe('MealController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG, mockMealListRes)),
       );
     const response = await mealController.getMeals(
-      mockUserResponse,
+      { user: mockUserResponse } as AuthenticatedRequest,
       startDate,
       endDate,
     );
@@ -73,7 +74,7 @@ describe('MealController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG, mockMealRes)),
       );
     const response = await mealController.getMealDetails(
-      mockUserResponse,
+      { user: mockUserResponse } as AuthenticatedRequest,
       mockMealId,
     );
     expect(response).toEqual(successResponse(API_SUCCESS_MSG, mockMealRes));
@@ -86,7 +87,7 @@ describe('MealController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await mealController.createMeal(
-      mockUserResponse,
+      { user: mockUserResponse } as AuthenticatedRequest,
       mockCreateMealReq,
     );
     expect(response.success).toBeTruthy();
@@ -99,7 +100,7 @@ describe('MealController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await mealController.updateMeal(
-      mockUserResponse,
+      { user: mockUserResponse } as AuthenticatedRequest,
       mockMealId,
       mockUpdateMealReq,
     );
@@ -113,7 +114,7 @@ describe('MealController', () => {
         Promise.resolve(successResponse(API_SUCCESS_MSG)),
       );
     const response = await mealController.removeMeal(
-      mockUserResponse,
+      { user: mockUserResponse } as AuthenticatedRequest,
       mockMealId,
     );
     expect(response.success).toBeTruthy();

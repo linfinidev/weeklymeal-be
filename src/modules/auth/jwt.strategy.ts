@@ -4,6 +4,9 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { UserResponseDto } from '../user/dtos/response-user.dto';
 
+export interface AuthenticatedRequest extends Request {
+  user: UserResponseDto;
+}
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
@@ -16,7 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: UserResponseDto) {
+  validate(payload: AuthenticatedRequest) {
     return payload;
   }
 }

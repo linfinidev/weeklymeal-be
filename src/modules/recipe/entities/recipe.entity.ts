@@ -1,16 +1,15 @@
-import { Ingredient } from '@/modules/ingredient/entities/ingredient.entity';
 import { User } from '@/modules/user/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
-  JoinTable,
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
+import { RecipeIngredient } from './recipe-ingredient.entity';
 
 @Entity({ name: 'recipes' })
 export class Recipe {
@@ -21,24 +20,16 @@ export class Recipe {
   name: string;
 
   @Column('text', { nullable: false })
-  content: string;
+  intructions: string;
 
   @Column({ nullable: true })
   img_url: string;
 
-  @ManyToMany(() => Ingredient, { cascade: true })
-  @JoinTable({
-    name: 'recipe_ingredients',
-    joinColumn: {
-      name: 'recipe_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'ingredient_id',
-      referencedColumnName: 'id',
-    },
+  @OneToMany(() => RecipeIngredient, (ri) => ri.recipe, {
+    cascade: true,
+    eager: true,
   })
-  ingredients: Ingredient[];
+  recipeIngredients: RecipeIngredient[];
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })

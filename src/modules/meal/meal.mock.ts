@@ -1,3 +1,4 @@
+import { mockRecipes } from '../recipe/recipe.mock';
 import { mockUser } from '../user/user.mock';
 import { CreateMealDto } from './dtos/create-meal.dto';
 import { MealListItemResponseDto } from './dtos/response-meal-list-item.dto';
@@ -50,26 +51,7 @@ export const mockMeals: Meal[] = [
     id: '1',
     date: new Date('2025-08-01'),
     type: 'lunch',
-    recipes: [
-      {
-        id: '1',
-        name: 'tomato soup',
-        content: '- Dice tomato\n- Crack 2 eggs',
-        img_url: 'imgSrc',
-        ingredients: [
-          {
-            id: '1',
-            name: 'tomato',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            user: mockUser,
-          },
-        ],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        user: mockUser,
-      },
-    ],
+    recipes: mockRecipes,
     createdAt: new Date(),
     updatedAt: new Date(),
     user: mockUser,
