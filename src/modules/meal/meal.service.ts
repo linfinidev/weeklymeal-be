@@ -27,10 +27,10 @@ export class MealService {
   async create(userId: string, createMealDto: CreateMealDto) {
     const recipes = await this.recipeRepository.find({
       where: {
-        id: In(createMealDto.recipe_ids),
+        id: In(createMealDto.recipeIds),
         user: { id: userId } as User,
       },
-      relations: ['ingredients'],
+      relations: ['recipeIngredients'],
     });
     const mealEntity = mapToMealEntity(createMealDto, recipes);
     const meal = this.mealRepository.create(mealEntity);
@@ -44,7 +44,7 @@ export class MealService {
         date: Between(new Date(startDate), new Date(endDate)),
         user: { id: userId },
       },
-      relations: ['recipes', 'recipes.ingredients'],
+      relations: ['recipes', 'recipes.recipeIngredients'],
     });
     const res = mapToMealListDtos(meals, startDate, endDate);
     return successResponse(API_SUCCESS_MSG, res);

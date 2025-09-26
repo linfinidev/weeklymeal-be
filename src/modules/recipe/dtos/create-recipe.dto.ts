@@ -24,7 +24,7 @@ export class CreateRecipeDto {
   @ApiProperty({ required: true, nullable: true, example: 'imgSrc' })
   @IsString()
   @IsOptional()
-  img_url: string;
+  imgUrl: string;
 
   @ApiProperty({
     required: true,

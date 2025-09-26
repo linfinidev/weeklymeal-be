@@ -10,7 +10,7 @@ export const mapToRecipeEntity = (
   const recipe = new Recipe();
   recipe.name = dto.name;
   recipe.intructions = dto.instructions;
-  recipe.img_url = dto.img_url;
+  recipe.imgUrl = dto.imgUrl;
   recipe.recipeIngredients = recipeIngredients;
   return recipe;
 };
@@ -20,7 +20,7 @@ export const mapToRecipeDto = (entity: Recipe): RecipeResponseDto => {
   dto.id = entity.id;
   dto.name = entity.name;
   dto.intructions = entity.intructions;
-  dto.img_url = entity.img_url ?? null;
+  dto.imgUrl = entity.imgUrl ?? null;
   dto.ingredientIds = entity.recipeIngredients.map((i) => i.id);
   return dto;
 };

@@ -24,14 +24,14 @@ export const mapToMealDto = (entity: Meal): MealResponseDto => {
   dto.id = entity.id;
   dto.date = convertDatetoString(entity.date);
   dto.type = entity.type;
-  dto.recipe_ids = entity.recipes.map((i) => i.id);
+  dto.recipeIds = entity.recipes.map((i) => i.id);
   return dto;
 };
 
 export const mapToMealItemDto = (entity: Meal): MealItemResponseDto => {
   const dto = new MealItemResponseDto();
   dto.id = entity.id;
-  dto.recipe_names = entity.recipes.map((i) => i.id);
+  dto.recipeNames = entity.recipes.map((i) => i.id);
   return dto;
 };
 

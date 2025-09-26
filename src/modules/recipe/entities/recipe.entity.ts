@@ -22,8 +22,8 @@ export class Recipe {
   @Column('text', { nullable: false })
   intructions: string;
 
-  @Column({ nullable: true })
-  img_url: string;
+  @Column({ name: 'img_url', nullable: true })
+  imgUrl: string;
 
   @OneToMany(() => RecipeIngredient, (ri) => ri.recipe, {
     cascade: true,
@@ -35,9 +35,9 @@ export class Recipe {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'create_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

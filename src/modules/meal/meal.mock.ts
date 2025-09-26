@@ -17,7 +17,7 @@ export const mockMealListRes: MealListItemResponseDto[] = [
     date: '2025/08/01',
     dinner: {
       id: '1',
-      recipe_names: ['bun', 'com'],
+      recipeNames: ['bun', 'com'],
     },
     lunch: null,
   },
@@ -28,7 +28,7 @@ export const mockMealsRes: MealResponseDto[] = [
     id: '1',
     date: '2025/08/01',
     type: 'lunch',
-    recipe_ids: ['1', '2'],
+    recipeIds: ['1', '2'],
   },
 ];
 
@@ -37,13 +37,13 @@ export const mockMealRes: MealResponseDto = mockMealsRes[0];
 export const mockCreateMealReq: CreateMealDto = {
   date: '2025/08/01',
   type: 'lunch',
-  recipe_ids: ['uuid-1', 'uuid-2'],
+  recipeIds: ['uuid-1', 'uuid-2'],
 };
 
 export const mockUpdateMealReq: UpdateMealDto = {
   date: '2025/08/01',
   type: 'dinner',
-  recipe_ids: ['uuid-1', 'uuid-2'],
+  recipeIds: ['uuid-1', 'uuid-2'],
 };
 
 export const mockMeals: Meal[] = [

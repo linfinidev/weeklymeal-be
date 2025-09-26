@@ -25,7 +25,7 @@ export const mockRecipesRes: RecipeResponseDto[] = [
     id: '1',
     name: 'tomato soup',
     intructions: '- Dice tomato\n- Crack 2 eggs',
-    img_url: 'imgSrc',
+    imgUrl: 'imgSrc',
     ingredientIds: ['1', '2'],
   },
 ];
@@ -42,14 +42,14 @@ export const mockRecipeListRes: RecipeListItemResponseDto[] = [
 export const mockCreateRecipeReq: CreateRecipeDto = {
   name: 'tomato soup',
   instructions: '- Dice tomato\n- Crack 2 eggs',
-  img_url: 'imgSrc',
+  imgUrl: 'imgSrc',
   recipeIngredients: [{ ingredientId: '1', unit: null }],
 };
 
 export const mockUpdateRecipeReq: UpdateRecipeDto = {
   name: 'tomato soup',
   instructions: '- Dice 2 tomato\n- Crack 2 eggs',
-  img_url: 'imgSrc',
+  imgUrl: 'imgSrc',
   recipeIngredients: [{ ingredientId: '1', unit: null }],
 };
 
@@ -58,7 +58,7 @@ export const mockRecipes: Recipe[] = [
     id: '1',
     name: 'tomato soup',
     intructions: '- Dice tomato\n- Crack 2 eggs',
-    img_url: 'imgSrc',
+    imgUrl: 'imgSrc',
     recipeIngredients: [
       {
         id: '1',

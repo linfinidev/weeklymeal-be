@@ -17,7 +17,7 @@ export class RecipeResponseDto {
 
   @ApiProperty({ example: '/imgSrc' })
   @Expose()
-  img_url: string;
+  imgUrl: string;
 
   @ApiProperty({ example: ['1', '2'] })
   @Expose()

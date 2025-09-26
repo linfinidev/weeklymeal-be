@@ -57,7 +57,7 @@ describe('MealService', () => {
         date: Between(new Date(startDate), new Date(endDate)),
         user: { id: mockUserId },
       },
-      relations: ['recipes', 'recipes.ingredients'],
+      relations: ['recipes', 'recipes.recipeIngredients'],
     });
   });
 

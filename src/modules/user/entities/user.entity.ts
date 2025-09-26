@@ -28,18 +28,20 @@ export class User {
     nullable: true,
     type: 'varchar',
     length: 255,
+    name: 'reset_token',
   })
   resetToken: string;
 
   @Column({
     nullable: true,
     type: Date,
+    name: 'reset_expires_at',
   })
   resetExpiresAt: Date;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'create_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
