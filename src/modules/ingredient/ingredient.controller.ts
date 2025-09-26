@@ -64,7 +64,7 @@ export class IngredientController {
     @Query('name') name?: string,
   ): Promise<GenericApiResponse<Array<IngredientResponseDto>>> {
     this.logger.log('find by ingredient name');
-    return this.ingredientService.getAll(name, req.user.id);
+    return this.ingredientService.getAll(req.user.id, name);
   }
 
   @Put(':id')

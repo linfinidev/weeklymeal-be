@@ -22,17 +22,15 @@ export class RecipeIngredient {
   recipe: Recipe;
 
   @ManyToOne(() => Ingredient, (ingredient) => ingredient.id, { eager: true })
-  @JoinColumn({
-    name: 'ingredient_id',
-  })
+  @JoinColumn({ name: 'ingredient_id' })
   ingredient: Ingredient;
 
   @Column({ nullable: false })
   unit: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'create_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

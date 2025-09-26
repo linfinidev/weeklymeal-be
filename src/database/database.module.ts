@@ -13,6 +13,10 @@ import { ConfigModule } from '@nestjs/config';
       synchronize: process.env.NODE_ENV === 'production' ? false : true,
       migrations: ['dist/migrations/*.js'],
       migrationsRun: true,
+      schema: 'weekly_meal',
+      extra: {
+        options: '-c search_path=weekly_meal',
+      },
     }),
   ],
 })

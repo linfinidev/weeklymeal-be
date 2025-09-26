@@ -53,7 +53,7 @@ describe('RecipeService', () => {
     await recipeService.getAll(mockUserId, 'egg');
     expect(recipeRepository.findAndCount).toHaveBeenCalledWith({
       where: { name: Like('egg%'), user: { id: mockUserId } },
-      relations: ['ingredients'],
+      relations: ['recipeIngredients'],
       skip: 0,
       take: 30,
       order: { createdAt: 'DESC' },

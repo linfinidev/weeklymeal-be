@@ -28,5 +28,5 @@ export class CreateMealDto {
   @IsArray()
   @IsUUID('all', { each: true })
   @IsNotEmpty()
-  recipe_ids: string[];
+  recipeIds: string[];
 }

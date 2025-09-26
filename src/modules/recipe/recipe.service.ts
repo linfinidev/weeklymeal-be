@@ -23,7 +23,7 @@ export class RecipeService {
     const newRecipe = new Recipe();
     newRecipe.name = createRecipeDto.name;
     newRecipe.intructions = createRecipeDto.instructions;
-    newRecipe.img_url = createRecipeDto.img_url;
+    newRecipe.imgUrl = createRecipeDto.imgUrl;
     newRecipe.user = { id: userId } as User;
 
     // Map ingredients
@@ -48,7 +48,7 @@ export class RecipeService {
     const pageNum = page ? parseInt(page) : 1;
     const [recipes, total] = await this.recipeRepository.findAndCount({
       where: { name: Like(`${recipeName || ''}%`), user: { id: userId } },
-      relations: ['ingredients'],
+      relations: ['recipeIngredients'],
       skip: (pageNum - 1) * limit,
       take: limit,
       order: { createdAt: 'DESC' },

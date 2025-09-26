@@ -23,5 +23,5 @@ export class MealResponseDto {
     }
     return [];
   })
-  recipe_ids: string[];
+  recipeIds: string[];
 }
