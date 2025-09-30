@@ -704,6 +704,32 @@
           "items"
         ]
       },
+      "CreateRecipeIngredientDto": {
+        "type": "object",
+        "properties": {
+          "unit": {
+            "type": "string",
+            "nullable": true,
+            "example": "1 gram"
+          },
+          "ingredientId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "example": "123-abc"
+          },
+          "ingredientName": {
+            "type": "string",
+            "nullable": true,
+            "example": "egg"
+          }
+        },
+        "required": [
+          "unit",
+          "ingredientId",
+          "ingredientName"
+        ]
+      },
       "CreateRecipeDto": {
         "type": "object",
         "properties": {
@@ -722,13 +748,14 @@
           },
           "recipeIngredients": {
             "example": [
-              "uuid-1",
-              "uuid-2"
+              {
+                "id": "1",
+                "unit": "1 tea spoon"
+              }
             ],
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "uuid"
+              "$ref": "#/components/schemas/CreateRecipeIngredientDto"
             }
           }
         },
@@ -842,13 +869,14 @@
           },
           "recipeIngredients": {
             "example": [
-              "uuid-1",
-              "uuid-2"
+              {
+                "id": "1",
+                "unit": "1 tea spoon"
+              }
             ],
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "uuid"
+              "$ref": "#/components/schemas/CreateRecipeIngredientDto"
             }
           }
         },

@@ -22,17 +22,15 @@ export class CreateRecipeDto {
   instructions: string;
 
   @ApiProperty({ required: true, nullable: true, example: 'imgSrc' })
-  @IsString()
   @IsOptional()
   imgUrl: string;
 
   @ApiProperty({
     required: true,
-    type: [String],
-    example: ['uuid-1', 'uuid-2'],
+    type: [CreateRecipeIngredientDto],
+    example: [{ id: '1', unit: '1 tea spoon' }],
   })
   @IsArray()
-  @IsUUID('all', { each: true })
   @IsNotEmpty()
   recipeIngredients: CreateRecipeIngredientDto[];
 }
