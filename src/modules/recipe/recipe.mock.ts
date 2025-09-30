@@ -43,14 +43,14 @@ export const mockCreateRecipeReq: CreateRecipeDto = {
   name: 'tomato soup',
   instructions: '- Dice tomato\n- Crack 2 eggs',
   imgUrl: 'imgSrc',
-  recipeIngredients: [{ ingredientId: '1', unit: null }],
+  recipeIngredients: [{ ingredientId: '1', unit: null, ingredientName: null }],
 };
 
 export const mockUpdateRecipeReq: UpdateRecipeDto = {
   name: 'tomato soup',
   instructions: '- Dice 2 tomato\n- Crack 2 eggs',
   imgUrl: 'imgSrc',
-  recipeIngredients: [{ ingredientId: '1', unit: null }],
+  recipeIngredients: [{ ingredientId: '1', unit: null, ingredientName: null }],
 };
 
 export const mockRecipes: Recipe[] = [

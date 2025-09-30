@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateRecipeDto } from './dtos/create-recipe.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recipe } from './entities/recipe.entity';
-import { Like, Repository } from 'typeorm';
+import { DataSource, Like, Repository } from 'typeorm';
 import { throwErrorResponse, successResponse } from '@/common/utils';
 import { API_SUCCESS_MSG } from '@/common/constants/messages';
 import { UpdateRecipeDto } from './dtos/update-recipe.dto';
@@ -17,30 +17,49 @@ export class RecipeService {
   constructor(
     @InjectRepository(Recipe)
     private readonly recipeRepository: Repository<Recipe>,
+    private datasource: DataSource,
   ) {}
 
   async create(userId: string, createRecipeDto: CreateRecipeDto) {
-    const newRecipe = new Recipe();
-    newRecipe.name = createRecipeDto.name;
-    newRecipe.intructions = createRecipeDto.instructions;
-    newRecipe.imgUrl = createRecipeDto.imgUrl;
-    newRecipe.user = { id: userId } as User;
+    const recipe = await this.datasource.transaction(async (manager) => {
+      const newRecipe = manager.create(Recipe, {
+        name: createRecipeDto.name,
+        intructions: createRecipeDto.instructions,
+        imgUrl: createRecipeDto.imgUrl,
+        user: { id: userId } as User,
+      });
+      await manager.save(newRecipe);
 
-    // Map ingredients
-    newRecipe.recipeIngredients = createRecipeDto.recipeIngredients.map(
-      (riDto) => {
-        const ri = new RecipeIngredient();
-        ri.unit = riDto.unit;
-        ri.ingredient = { id: riDto.ingredientId } as Ingredient;
-        return ri;
-      },
-    );
-    const recipe = this.recipeRepository.create({
-      ...newRecipe,
-      user: { id: userId } as User,
+      const recipeIngredients: RecipeIngredient[] = [];
+      for (const riDto of createRecipeDto.recipeIngredients) {
+        let ingredient: Ingredient;
+
+        if (riDto.ingredientId) {
+          ingredient = await manager.findOneBy(Ingredient, {
+            id: riDto.ingredientId,
+          });
+          if (!ingredient) {
+            throwErrorResponse('ingredient not found', HttpStatus.NOT_FOUND);
+          }
+        } else {
+          ingredient = manager.create(Ingredient, {
+            name: riDto.ingredientName.toLowerCase(),
+            user: { id: userId } as User,
+          });
+          await manager.save(ingredient);
+        }
+
+        const ri = manager.create(RecipeIngredient, {
+          recipe: newRecipe,
+          ingredient: ingredient,
+          unit: riDto.unit,
+        });
+        recipeIngredients.push(ri);
+      }
+      await manager.save(RecipeIngredient, recipeIngredients);
+      return newRecipe;
     });
-    const res = await this.recipeRepository.save(recipe);
-    return successResponse(API_SUCCESS_MSG, mapToRecipeDto(res));
+    return successResponse(API_SUCCESS_MSG, mapToRecipeDto(recipe));
   }
 
   async getAll(userId: string, recipeName?: string, page?: string) {
