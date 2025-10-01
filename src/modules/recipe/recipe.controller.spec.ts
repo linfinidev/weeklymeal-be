@@ -15,10 +15,13 @@ import {
 import { Ingredient } from '../ingredient/entities/ingredient.entity';
 import { mockUserResponse } from '../user/user.mock';
 import { AuthenticatedRequest } from '../auth/jwt.strategy';
+import { dataSourceMockFactory, MockType } from './recipe.service.spec';
+import { DataSource } from 'typeorm';
 
 describe('RecipeController', () => {
   let recipeController: RecipeController;
   let recipeService: RecipeService;
+  let datasource: MockType<DataSource>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -40,11 +43,16 @@ describe('RecipeController', () => {
             find: jest.fn(),
           },
         },
+        {
+          provide: DataSource,
+          useFactory: dataSourceMockFactory,
+        },
       ],
     }).compile();
 
     recipeController = module.get<RecipeController>(RecipeController);
     recipeService = module.get(RecipeService);
+    datasource = module.get(DataSource);
   });
 
   it('should be defined', () => {

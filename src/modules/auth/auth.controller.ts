@@ -7,6 +7,7 @@ import { Response } from 'express';
 import { Public } from '@/common/decorators/public.decorator';
 import { ForgotPasswordDto } from '../user/dtos/forgot-password.dto';
 import { ResetPasswordDto } from '../user/dtos/reset-password.dto';
+import { MAX_COOKIES_AGE } from '@/common/constants';
 
 @ApiTags('Default')
 @Controller('auth')
@@ -36,7 +37,7 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
+      maxAge: MAX_COOKIES_AGE,
     });
 
     return user;
@@ -49,9 +50,7 @@ export class AuthController {
     status: 201,
     description: 'Login as guest',
   })
-  async guestLogin(
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async guestLogin(@Res({ passthrough: true }) res: Response) {
     this.logger.log('login default');
     const user = await this.authService.guestLogin();
 
@@ -62,7 +61,7 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
+      maxAge: MAX_COOKIES_AGE,
     });
 
     return { message: 'Logged in as guest' };

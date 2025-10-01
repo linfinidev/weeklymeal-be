@@ -1,3 +1,5 @@
+import { CreateUserDto } from './dtos/create-user.dto';
+import { LoginUserDto } from './dtos/login-user.dto';
 import { UserResponseDto } from './dtos/response-user.dto';
 import { User } from './entities/user.entity';
 
@@ -19,3 +21,18 @@ export const mockUserResponse: UserResponseDto = {
 };
 
 export const mockUserId = '1';
+
+export const mockUserLogin: LoginUserDto = {
+  email: 'john_doe@example.com',
+  password: '123@Abcd',
+};
+
+export const mockReqHeader = {
+  cookie: jest.fn(),
+} as any;
+
+export const mockCreateUserDto: CreateUserDto = {
+  email: 'john_doe@example.com',
+  password: '123@Abcd',
+  name: 'Test User',
+};
