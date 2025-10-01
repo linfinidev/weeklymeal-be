@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RecipeService } from './recipe.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { getDataSourceName, getRepositoryToken } from '@nestjs/typeorm';
 import { Recipe } from './entities/recipe.entity';
-import { Like } from 'typeorm';
+import { DataSource, Like } from 'typeorm';
 import {
   mockRecipes,
   mockRecipe,
@@ -12,9 +12,31 @@ import {
 import { Ingredient } from '../ingredient/entities/ingredient.entity';
 import { mockUserId } from '../user/user.mock';
 
+export type MockType<T> = {
+  [P in keyof T]?: jest.Mock<{}>;
+};
+
+export const dataSourceMockFactory: () => MockType<DataSource> = jest.fn(
+  () => ({
+    createQueryRunner: jest.fn().mockImplementation(() => ({
+      connect: jest.fn(),
+      startTransaction: jest.fn(),
+      release: jest.fn(),
+      rolbackTransaction: jest.fn(),
+      transaction: jest.fn(),
+      manager: {
+        save: jest.fn(),
+        findOneBy: jest.fn(),
+        create: jest.fn(),
+      },
+    })),
+  }),
+);
+
 describe('RecipeService', () => {
   let recipeService: RecipeService;
   let recipeRepository: Record<string, jest.Mock>;
+  let datasource: MockType<DataSource>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -36,11 +58,16 @@ describe('RecipeService', () => {
             find: jest.fn(),
           },
         },
+        {
+          provide: DataSource,
+          useFactory: dataSourceMockFactory,
+        },
       ],
     }).compile();
 
     recipeService = module.get<RecipeService>(RecipeService);
     recipeRepository = module.get(getRepositoryToken(Recipe));
+    datasource = module.get(DataSource);
   });
 
   it('should be defined', () => {
