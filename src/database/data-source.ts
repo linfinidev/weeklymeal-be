@@ -14,11 +14,4 @@ export default new DataSource({
   migrations: ['src/migrations/*.ts'],
   synchronize: configService.get('NODE_ENV') === 'production' ? false : true,
   migrationsRun: true,
-  schema: 'weekly_meal',
-  extra:
-    configService.get('NODE_ENV') !== 'production'
-      ? {
-          options: '-c search_path=weekly_meal',
-        }
-      : undefined,
 });
