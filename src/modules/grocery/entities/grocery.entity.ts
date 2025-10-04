@@ -22,7 +22,7 @@ export class Grocery {
   @Column({ name: 'from_date' })
   fromDate: string;
 
-  @Column({ name: 'from_date' })
+  @Column({ name: 'toDate' })
   toDate: string;
 
   @Column({ name: 'ingredient_id', type: 'uuid' })
