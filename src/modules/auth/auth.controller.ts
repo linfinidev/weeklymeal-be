@@ -35,7 +35,7 @@ export class AuthController {
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
     });
 
@@ -49,9 +49,7 @@ export class AuthController {
     status: 201,
     description: 'Login as guest',
   })
-  async guestLogin(
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async guestLogin(@Res({ passthrough: true }) res: Response) {
     this.logger.log('login default');
     const user = await this.authService.guestLogin();
 
@@ -61,7 +59,7 @@ export class AuthController {
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
     });
 
