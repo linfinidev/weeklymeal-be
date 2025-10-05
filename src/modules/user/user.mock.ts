@@ -1,3 +1,4 @@
+import { Response } from 'express';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { UserResponseDto } from './dtos/response-user.dto';
@@ -29,7 +30,7 @@ export const mockUserLogin: LoginUserDto = {
 
 export const mockReqHeader = {
   cookie: jest.fn(),
-} as any;
+} as unknown as Response<any, Record<string, any>>;
 
 export const mockCreateUserDto: CreateUserDto = {
   email: 'john_doe@example.com',
