@@ -37,7 +37,7 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
+      maxAge: MAX_COOKIES_AGE,
     });
 
     return user;
@@ -61,7 +61,7 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
+      maxAge: MAX_COOKIES_AGE,
     });
 
     return { message: 'Logged in as guest' };
