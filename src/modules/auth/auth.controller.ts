@@ -36,7 +36,7 @@ export class AuthController {
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
       maxAge: MAX_COOKIES_AGE,
     });
 
@@ -60,7 +60,7 @@ export class AuthController {
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
       maxAge: MAX_COOKIES_AGE,
     });
 

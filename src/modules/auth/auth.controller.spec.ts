@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -7,6 +8,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { mockReqHeader, mockUserResponse } from '../user/user.mock';
 import { successResponse } from '@/common/utils';
+import { MAX_COOKIES_AGE } from '@/common/constants';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -57,8 +59,8 @@ describe('AuthController', () => {
       expect.objectContaining({
         httpOnly: true,
         secure: true,
-        sameSite: 'strict',
-        maxAge: expect.any(Number),
+        sameSite: 'none',
+        maxAge: MAX_COOKIES_AGE,
       }),
     );
     expect(result).toEqual({ message: 'Logged in as guest' });
