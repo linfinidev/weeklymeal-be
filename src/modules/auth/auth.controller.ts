@@ -36,8 +36,8 @@ export class AuthController {
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
-      maxAge: MAX_COOKIES_AGE,
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
     });
 
     return user;
@@ -60,8 +60,8 @@ export class AuthController {
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
-      maxAge: MAX_COOKIES_AGE,
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
     });
 
     return { message: 'Logged in as guest' };
