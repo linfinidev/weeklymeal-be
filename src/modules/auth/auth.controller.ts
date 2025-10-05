@@ -7,6 +7,7 @@ import { Response } from 'express';
 import { Public } from '@/common/decorators/public.decorator';
 import { ForgotPasswordDto } from '../user/dtos/forgot-password.dto';
 import { ResetPasswordDto } from '../user/dtos/reset-password.dto';
+import { MAX_COOKIES_AGE } from '@/common/constants';
 
 @ApiTags('Default')
 @Controller('auth')
