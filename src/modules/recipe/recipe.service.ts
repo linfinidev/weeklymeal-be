@@ -57,6 +57,7 @@ export class RecipeService {
         recipeIngredients.push(ri);
       }
       await manager.save(RecipeIngredient, recipeIngredients);
+      newRecipe.recipeIngredients = recipeIngredients;
       return newRecipe;
     });
     return successResponse(API_SUCCESS_MSG, mapToRecipeDto(recipe));
