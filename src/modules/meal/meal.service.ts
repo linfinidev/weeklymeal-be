@@ -10,7 +10,7 @@ import {
   mapToMealListDtos,
 } from '@/mappers/mealMapper';
 import { successResponse, throwErrorResponse } from '@/common/utils';
-import { API_SUCCESS_MSG, API_FAIL_MSG } from '@/common/constants/messages';
+import { API_SUCCESS_MSG } from '@/common/constants/messages';
 import { Recipe } from '../recipe/entities/recipe.entity';
 import { User } from '../user/entities/user.entity';
 

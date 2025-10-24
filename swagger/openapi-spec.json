@@ -223,18 +223,12 @@
         "operationId": "getRecipeDetails",
         "parameters": [
           {
-            "name": ":id",
+            "name": "id",
             "required": true,
             "in": "path",
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {}
           }
         ],
         "responses": {
@@ -766,6 +760,26 @@
           "recipeIngredients"
         ]
       },
+      "RecipeIngredientResponseDto": {
+        "type": "object",
+        "properties": {
+          "unit": {
+            "type": "string",
+            "nullable": false,
+            "example": "1 gram"
+          },
+          "ingredientId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": false,
+            "example": "123-abc"
+          }
+        },
+        "required": [
+          "unit",
+          "ingredientId"
+        ]
+      },
       "RecipeResponseDto": {
         "type": "object",
         "properties": {
@@ -785,14 +799,16 @@
             "type": "string",
             "example": "/imgSrc"
           },
-          "ingredientIds": {
+          "ingredients": {
             "example": [
-              "1",
-              "2"
+              {
+                "unit": "1 qua",
+                "id": "1"
+              }
             ],
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/RecipeIngredientResponseDto"
             }
           }
         },
@@ -801,7 +817,7 @@
           "name",
           "intructions",
           "imgUrl",
-          "ingredientIds"
+          "ingredients"
         ]
       },
       "RecipeListItemResponseDto": {

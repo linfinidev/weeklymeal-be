@@ -1,11 +1,11 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateIngredientDto } from './dtos/create-ingredient.dto';
 import { UpdateIngredientDto } from './dtos/update-ingredient.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ingredient } from './entities/ingredient.entity';
-import { Like, Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { throwErrorResponse, successResponse } from '@/common/utils';
-import { API_FAIL_MSG, API_SUCCESS_MSG } from '@/common/constants/messages';
+import { API_SUCCESS_MSG } from '@/common/constants/messages';
 import { plainToInstance } from 'class-transformer';
 import { IngredientResponseDto } from './dtos/response-ingredient.dto';
 import { User } from '../user/entities/user.entity';
@@ -31,7 +31,7 @@ export class IngredientService {
 
   async getAll(userId: string, ingredientName?: string) {
     const ingredients = await this.ingredientRepository.find({
-      where: { name: Like(`${ingredientName || ''}%`), user: { id: userId } },
+      where: { name: ILike(`%${ingredientName || ''}%`), user: { id: userId } },
     });
     const res = plainToInstance(IngredientResponseDto, ingredients, {
       excludeExtraneousValues: true,

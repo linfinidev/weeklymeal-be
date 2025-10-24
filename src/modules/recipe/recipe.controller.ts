@@ -80,7 +80,7 @@ export class RecipeController {
   })
   getRecipeDetails(
     @Request() req: AuthenticatedRequest,
-    @Param(':id') id: string,
+    @Param('id') id: string,
   ): Promise<GenericApiResponse<RecipeResponseDto>> {
     this.logger.log('find by recipe id');
     return this.recipeService.getDetails(req.user.id, id);

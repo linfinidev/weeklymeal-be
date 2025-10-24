@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { IngredientService } from './ingredient.service';
 import { Ingredient } from './entities/ingredient.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Like } from 'typeorm';
+import { ILike } from 'typeorm';
 import {
   mockIngredients,
   mockIngredient,
@@ -43,7 +43,7 @@ describe('IngredientService', () => {
 
     await ingredientService.getAll(mockUserId, 'Tom');
     expect(ingredientRepository.find).toHaveBeenCalledWith({
-      where: { name: Like('Tom%'), user: { id: mockUserId } },
+      where: { name: ILike('%Tom%'), user: { id: mockUserId } },
     });
   });
 

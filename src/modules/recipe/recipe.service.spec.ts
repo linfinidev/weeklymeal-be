@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RecipeService } from './recipe.service';
-import { getDataSourceName, getRepositoryToken } from '@nestjs/typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { Recipe } from './entities/recipe.entity';
-import { DataSource, Like } from 'typeorm';
+import { DataSource, ILike } from 'typeorm';
 import {
   mockRecipes,
   mockRecipe,
@@ -13,7 +13,7 @@ import { Ingredient } from '../ingredient/entities/ingredient.entity';
 import { mockUserId } from '../user/user.mock';
 
 export type MockType<T> = {
-  [P in keyof T]?: jest.Mock<{}>;
+  [P in keyof T]?: jest.Mock;
 };
 
 export const dataSourceMockFactory: () => MockType<DataSource> = jest.fn(
@@ -61,6 +61,9 @@ describe('RecipeService', () => {
         {
           provide: DataSource,
           useFactory: dataSourceMockFactory,
+          useValue: {
+            transaction: jest.fn(),
+          },
         },
       ],
     }).compile();
@@ -68,6 +71,10 @@ describe('RecipeService', () => {
     recipeService = module.get<RecipeService>(RecipeService);
     recipeRepository = module.get(getRepositoryToken(Recipe));
     datasource = module.get(DataSource);
+  });
+
+  it('should do something', () => {
+    expect(datasource).toBeDefined();
   });
 
   it('should be defined', () => {
@@ -79,7 +86,7 @@ describe('RecipeService', () => {
 
     await recipeService.getAll(mockUserId, 'egg');
     expect(recipeRepository.findAndCount).toHaveBeenCalledWith({
-      where: { name: Like('egg%'), user: { id: mockUserId } },
+      where: { name: ILike('%egg%'), user: { id: mockUserId } },
       relations: ['recipeIngredients'],
       skip: 0,
       take: 30,
@@ -93,6 +100,7 @@ describe('RecipeService', () => {
     await recipeService.getDetails(mockUserId, mockRecipeId);
     expect(recipeRepository.findOne).toHaveBeenCalledWith({
       where: { id: mockRecipeId, user: { id: mockUserId } },
+      relations: ['recipeIngredients'],
     });
   });
 
@@ -102,6 +110,7 @@ describe('RecipeService', () => {
     await recipeService.update(mockUserId, mockRecipeId, mockUpdateRecipeReq);
     expect(recipeRepository.findOne).toHaveBeenCalledWith({
       where: { id: mockRecipeId, user: { id: mockUserId } },
+      relations: ['recipeIngredients', 'recipeIngredients.ingredient'],
     });
   });
 
