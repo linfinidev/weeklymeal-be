@@ -1,6 +1,7 @@
-import { Ingredient } from '@/modules/ingredient/entities/ingredient.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
+import { RecipeIngredientResponseDto } from './response-recipe-ingredient.dto';
+import { RecipeIngredient } from '../entities/recipe-ingredient.entity';
 
 export class RecipeResponseDto {
   @ApiProperty({ example: '1' })
@@ -19,13 +20,16 @@ export class RecipeResponseDto {
   @Expose()
   imgUrl: string;
 
-  @ApiProperty({ example: ['1', '2'] })
+  @ApiProperty({ example: [{ unit: '1 qua', id: '1' }] })
   @Expose()
   @Transform(({ value }) => {
     if (Array.isArray(value)) {
-      return value.map((ingredient: Ingredient) => ingredient.id);
+      return value.map((ingredient: RecipeIngredient) => ({
+        ingredientId: ingredient.id,
+        unit: ingredient.unit,
+      }));
     }
     return [];
   })
-  ingredientIds: string[];
+  ingredients: RecipeIngredientResponseDto[];
 }

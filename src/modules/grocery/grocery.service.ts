@@ -5,6 +5,7 @@ import { UpdateGroceryDto } from './dto/update-grocery.dto';
 @Injectable()
 export class GroceryService {
   create(createGroceryDto: CreateGroceryDto) {
+    console.log(createGroceryDto);
     return 'This action adds a new grocery';
   }
 
@@ -17,6 +18,7 @@ export class GroceryService {
   }
 
   update(id: number, updateGroceryDto: UpdateGroceryDto) {
+    console.log(updateGroceryDto);
     return `This action updates a #${id} grocery`;
   }
 

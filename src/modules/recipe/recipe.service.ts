@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateRecipeDto } from './dtos/create-recipe.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recipe } from './entities/recipe.entity';
-import { DataSource, Like, Repository } from 'typeorm';
+import { DataSource, ILike, Repository } from 'typeorm';
 import { throwErrorResponse, successResponse } from '@/common/utils';
 import { API_SUCCESS_MSG } from '@/common/constants/messages';
 import { UpdateRecipeDto } from './dtos/update-recipe.dto';
@@ -67,7 +67,7 @@ export class RecipeService {
     const limit = 30;
     const pageNum = page ? parseInt(page) : 1;
     const [recipes, total] = await this.recipeRepository.findAndCount({
-      where: { name: Like(`${recipeName || ''}%`), user: { id: userId } },
+      where: { name: ILike(`%${recipeName || ''}%`), user: { id: userId } },
       relations: ['recipeIngredients'],
       skip: (pageNum - 1) * limit,
       take: limit,
@@ -89,6 +89,7 @@ export class RecipeService {
   async getDetails(userId: string, id: string) {
     const recipe = await this.recipeRepository.findOne({
       where: { id: id, user: { id: userId } },
+      relations: ['recipeIngredients'],
     });
     if (!recipe) {
       throwErrorResponse('Recipe not found', HttpStatus.NOT_FOUND);
@@ -99,13 +100,82 @@ export class RecipeService {
 
   async update(userId: string, id: string, updateRecipeDto: UpdateRecipeDto) {
     const recipe = await this.recipeRepository.findOne({
-      where: { id: id, user: { id: userId } },
+      where: { id, user: { id: userId } },
+      relations: ['recipeIngredients', 'recipeIngredients.ingredient'],
     });
     if (!recipe) {
       throwErrorResponse('Recipe not found', HttpStatus.NOT_FOUND);
     }
-    Object.assign(recipe, updateRecipeDto);
-    await this.recipeRepository.save(recipe);
+
+    await this.datasource.transaction(async (manager) => {
+      // 1️⃣ Update main recipe fields
+      recipe.name = updateRecipeDto.name ?? recipe.name;
+      recipe.intructions = updateRecipeDto.instructions ?? recipe.intructions;
+      recipe.imgUrl = updateRecipeDto.imgUrl ?? recipe.imgUrl;
+
+      // 2️⃣ Get current and incoming ingredient sets
+      const existingRIs = recipe.recipeIngredients;
+      const updatedRIs = updateRecipeDto.recipeIngredients;
+
+      // Track new list
+      const newRecipeIngredients: RecipeIngredient[] = [];
+
+      for (const riDto of updatedRIs) {
+        let ingredient: Ingredient;
+
+        if (riDto.ingredientId) {
+          ingredient = await manager.findOneBy(Ingredient, {
+            id: riDto.ingredientId,
+          });
+          if (!ingredient) {
+            throwErrorResponse('ingredient not found', HttpStatus.NOT_FOUND);
+          }
+        } else {
+          ingredient = manager.create(Ingredient, {
+            name: riDto.ingredientName.toLowerCase(),
+            user: { id: userId } as User,
+          });
+          await manager.save(ingredient);
+        }
+
+        // Check if recipe already had this ingredient
+        const existingRI = existingRIs.find(
+          (ri) => ri.ingredient.id === ingredient.id,
+        );
+
+        if (existingRI) {
+          // Update existing
+          existingRI.unit = riDto.unit;
+          await manager.save(existingRI);
+          newRecipeIngredients.push(existingRI);
+        } else {
+          // Create new
+          const newRI = manager.create(RecipeIngredient, {
+            recipe,
+            ingredient,
+            unit: riDto.unit,
+          });
+          await manager.save(newRI);
+          newRecipeIngredients.push(newRI);
+        }
+      }
+
+      // 3️⃣ Delete removed ingredients
+      const toDelete = existingRIs.filter(
+        (ri) =>
+          !newRecipeIngredients.find(
+            (nri) => nri.ingredient.id === ri.ingredient.id,
+          ),
+      );
+      if (toDelete.length > 0) {
+        await manager.remove(toDelete);
+      }
+
+      // 4️⃣ Update relation reference
+      recipe.recipeIngredients = newRecipeIngredients;
+      await manager.save(recipe);
+    });
+
     return successResponse(API_SUCCESS_MSG);
   }
 

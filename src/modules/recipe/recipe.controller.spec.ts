@@ -55,6 +55,10 @@ describe('RecipeController', () => {
     datasource = module.get(DataSource);
   });
 
+  it('should do something', () => {
+    expect(datasource).toBeDefined();
+  });
+
   it('should be defined', () => {
     expect(recipeController).toBeDefined();
   });

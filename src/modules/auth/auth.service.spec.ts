@@ -43,7 +43,7 @@ describe('AuthService', () => {
 
     const result = await authService.guestLogin();
 
-    expect(userService.findUser).toHaveBeenCalledWith({
+    expect(userService['findUser']).toHaveBeenCalledWith({
       email: process.env.DEFAULT_USER_EMAIL,
       password: process.env.DEFAULT_USER_PW,
     });

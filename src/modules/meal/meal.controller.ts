@@ -23,7 +23,6 @@ import {
 import { MealResponseDto } from './dtos/response-meal.dto';
 import { GenericApiResponse } from '@/common/dtos';
 import { MealListItemResponseDto } from './dtos/response-meal-list-item.dto';
-import { UserResponseDto } from '../user/dtos/response-user.dto';
 import { AuthenticatedRequest } from '../auth/jwt.strategy';
 
 @ApiTags('Default')

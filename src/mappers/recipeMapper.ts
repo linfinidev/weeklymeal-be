@@ -21,7 +21,10 @@ export const mapToRecipeDto = (entity: Recipe): RecipeResponseDto => {
   dto.name = entity.name;
   dto.intructions = entity.intructions;
   dto.imgUrl = entity.imgUrl ?? null;
-  dto.ingredientIds = entity.recipeIngredients.map((i) => i.id);
+  dto.ingredients = entity.recipeIngredients.map((i) => ({
+    ingredientId: i.ingredient.id,
+    unit: i.unit,
+  }));
   return dto;
 };
 

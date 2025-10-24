@@ -26,7 +26,7 @@ export const mockRecipesRes: RecipeResponseDto[] = [
     name: 'tomato soup',
     intructions: '- Dice tomato\n- Crack 2 eggs',
     imgUrl: 'imgSrc',
-    ingredientIds: ['1', '2'],
+    ingredients: [{ ingredientId: '1', unit: '1 qua' }],
   },
 ];
 
