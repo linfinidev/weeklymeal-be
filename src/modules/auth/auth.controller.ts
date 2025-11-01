@@ -38,6 +38,7 @@ export class AuthController {
       secure: true,
       sameSite: 'none',
       maxAge: MAX_COOKIES_AGE,
+      partitioned: true,
     });
 
     return user;
@@ -62,6 +63,7 @@ export class AuthController {
       secure: true,
       sameSite: 'none',
       maxAge: MAX_COOKIES_AGE,
+      partitioned: true,
     });
 
     return { message: 'Logged in as guest' };
