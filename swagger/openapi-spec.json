@@ -627,6 +627,36 @@
   "servers": [],
   "components": {
     "schemas": {
+      "PaginatedDto": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "pageNum": {
+            "type": "number"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "total",
+          "limit",
+          "totalPages",
+          "pageNum",
+          "items"
+        ]
+      },
       "CreateIngredientDto": {
         "type": "object",
         "properties": {
@@ -666,36 +696,6 @@
         },
         "required": [
           "name"
-        ]
-      },
-      "PaginatedDto": {
-        "type": "object",
-        "properties": {
-          "total": {
-            "type": "number"
-          },
-          "limit": {
-            "type": "number"
-          },
-          "totalPages": {
-            "type": "number"
-          },
-          "pageNum": {
-            "type": "number"
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "total",
-          "limit",
-          "totalPages",
-          "pageNum",
-          "items"
         ]
       },
       "CreateRecipeIngredientDto": {

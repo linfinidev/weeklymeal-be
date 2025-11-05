@@ -39,6 +39,7 @@ export class AuthController {
       sameSite: 'none',
       maxAge: MAX_COOKIES_AGE,
       partitioned: true,
+      path: '/',
     });
 
     return user;
@@ -64,6 +65,7 @@ export class AuthController {
       sameSite: 'none',
       maxAge: MAX_COOKIES_AGE,
       partitioned: true,
+      path: '/',
     });
 
     return { message: 'Logged in as guest' };
@@ -77,7 +79,14 @@ export class AuthController {
     description: 'log out',
   })
   logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('authToken');
+    res.clearCookie('authToken', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: MAX_COOKIES_AGE,
+      partitioned: true,
+      path: '/',
+    });
     return { message: 'Logged out' };
   }
 

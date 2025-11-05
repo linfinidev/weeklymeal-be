@@ -1,10 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
 import { Public } from './common/decorators/public.decorator';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { PaginatedDto } from './common/dtos/api-paginated.dto';
 
 @ApiTags('Default')
 @Public()
 @Controller()
+@ApiExtraModels(PaginatedDto)
 export class AppController {
   @Get('healthcheck')
   @ApiOperation({

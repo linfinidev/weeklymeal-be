@@ -62,6 +62,7 @@ describe('AuthController', () => {
         sameSite: 'none',
         maxAge: MAX_COOKIES_AGE,
         partitioned: true,
+        path: '/',
       }),
     );
     expect(result).toEqual({ message: 'Logged in as guest' });
