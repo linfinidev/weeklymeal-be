@@ -14,7 +14,6 @@ import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dtos/create-recipe.dto';
 import { UpdateRecipeDto } from './dtos/update-recipe.dto';
 import {
-  ApiExtraModels,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -24,12 +23,10 @@ import {
 import { GenericApiResponse } from '@/common/dtos';
 import { RecipeResponseDto } from './dtos/response-recipe.dto';
 import { RecipeListResponseDto } from './dtos/response-recipe-list.dto';
-import { PaginatedDto } from '@/common/dtos/api-paginated.dto';
 import { AuthenticatedRequest } from '../auth/jwt.strategy';
 
 @ApiTags('Default')
 @Controller('recipe')
-@ApiExtraModels(PaginatedDto)
 export class RecipeController {
   private readonly logger = new Logger(RecipeService.name);
   constructor(private readonly recipeService: RecipeService) {}
