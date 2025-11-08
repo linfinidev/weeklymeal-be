@@ -25,6 +25,15 @@ export class MealService {
   ) {}
 
   async create(userId: string, createMealDto: CreateMealDto) {
+    const existingMeal = await this.mealRepository.findOne({
+      where: {
+        date: new Date(createMealDto.date),
+        type: createMealDto.type,
+      },
+    });
+    if (existingMeal) {
+      throwErrorResponse('Meal already exists', HttpStatus.BAD_REQUEST);
+    }
     const recipes = await this.recipeRepository.find({
       where: {
         id: In(createMealDto.recipeIds),
@@ -33,7 +42,10 @@ export class MealService {
       relations: ['recipeIngredients'],
     });
     const mealEntity = mapToMealEntity(createMealDto, recipes);
-    const meal = this.mealRepository.create(mealEntity);
+    const meal = this.mealRepository.create({
+      ...mealEntity,
+      user: { id: userId } as User,
+    });
     const res = await this.mealRepository.save(meal);
     return successResponse(API_SUCCESS_MSG, mapToMealDto(res));
   }
@@ -53,6 +65,7 @@ export class MealService {
   async getDetails(userId: string, id: string) {
     const meal = await this.mealRepository.findOne({
       where: { id: id, user: { id: userId } },
+      relations: ['recipes'],
     });
     if (!meal) {
       throwErrorResponse('Meal not found', HttpStatus.NOT_FOUND);

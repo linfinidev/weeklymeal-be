@@ -24,7 +24,7 @@ export const mapToMealDto = (entity: Meal): MealResponseDto => {
   dto.id = entity.id;
   dto.date = convertDatetoString(entity.date);
   dto.type = entity.type;
-  dto.recipeIds = entity.recipes.map((i) => i.id);
+  dto.recipes = entity.recipes.map((i) => ({ id: i.id, name: i.name }));
   return dto;
 };
 
