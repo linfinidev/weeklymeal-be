@@ -947,14 +947,14 @@
             "type": "string",
             "example": "lunch"
           },
-          "recipeIds": {
+          "recipes": {
             "example": [
               "1",
               "2"
             ],
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/RecipeListItemResponseDto"
             }
           }
         },
@@ -962,7 +962,7 @@
           "id",
           "date",
           "type",
-          "recipeIds"
+          "recipes"
         ]
       },
       "MealItemResponseDto": {
