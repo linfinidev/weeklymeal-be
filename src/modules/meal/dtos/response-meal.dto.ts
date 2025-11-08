@@ -1,3 +1,4 @@
+import { RecipeListItemResponseDto } from '@/modules/recipe/dtos/response-recipe-list-item.dto';
 import { Recipe } from '@/modules/recipe/entities/recipe.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
@@ -19,9 +20,12 @@ export class MealResponseDto {
   @Expose()
   @Transform(({ value }) => {
     if (Array.isArray(value)) {
-      return value.map((recipe: Recipe) => recipe.id);
+      return value.map((recipe: Recipe) => ({
+        id: recipe.id,
+        name: recipe.name,
+      }));
     }
     return [];
   })
-  recipeIds: string[];
+  recipes: RecipeListItemResponseDto[];
 }

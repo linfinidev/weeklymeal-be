@@ -67,6 +67,7 @@ describe('MealService', () => {
     await mealService.getDetails(mockUserId, mockMealId);
     expect(mealRepository.findOne).toHaveBeenCalledWith({
       where: { id: mockMealId, user: { id: mockUserId } },
+      relations: ['recipes'],
     });
   });
 

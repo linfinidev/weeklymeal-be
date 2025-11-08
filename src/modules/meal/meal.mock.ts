@@ -28,7 +28,10 @@ export const mockMealsRes: MealResponseDto[] = [
     id: '1',
     date: '2025/08/01',
     type: 'lunch',
-    recipeIds: ['1', '2'],
+    recipes: [
+      { id: '1', name: 'recipe 1' },
+      { id: '2', name: 'recipe 2' },
+    ],
   },
 ];
 
