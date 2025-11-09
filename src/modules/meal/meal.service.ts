@@ -56,7 +56,7 @@ export class MealService {
         date: Between(new Date(startDate), new Date(endDate)),
         user: { id: userId },
       },
-      relations: ['recipes', 'recipes.recipeIngredients'],
+      relations: ['recipes'],
     });
     const res = mapToMealListDtos(meals, startDate, endDate);
     return successResponse(API_SUCCESS_MSG, res);

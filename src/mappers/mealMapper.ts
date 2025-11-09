@@ -31,7 +31,7 @@ export const mapToMealDto = (entity: Meal): MealResponseDto => {
 export const mapToMealItemDto = (entity: Meal): MealItemResponseDto => {
   const dto = new MealItemResponseDto();
   dto.id = entity.id;
-  dto.recipeNames = entity.recipes.map((i) => i.id);
+  dto.recipeNames = entity.recipes.map((i) => i.name);
   return dto;
 };
 
