@@ -6,3 +6,4 @@ export const MEAL_TYPE = {
 export const DATE_YYYYMMDD_SLASH_FORMAT = 'yyyy/MM/dd';
 export const DATE_YYYYMMDD_HYPHEN_FORMAT = 'yyyy-MM-dd';
 export const MAX_COOKIES_AGE = 7 * 24 * 60 * 60 * 1000; // 7 day
+export const LLM_MODEL_DEEPSEEK = 'deepseek-ai/DeepSeek-V4-Pro:novita';
